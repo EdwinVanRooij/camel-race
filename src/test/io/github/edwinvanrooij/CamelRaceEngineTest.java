@@ -85,5 +85,11 @@ class CamelRaceEngineTest {
             assertNotEquals(card.getCardValue(), Card.CardValue.ACE);
         }
     }
+
+    @Test
+    void testNextRound() {
+
+    }
+
 }
 

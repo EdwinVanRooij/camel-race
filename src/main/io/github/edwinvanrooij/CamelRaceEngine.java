@@ -1,7 +1,8 @@
 package io.github.edwinvanrooij;
 
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,10 @@ public class CamelRaceEngine {
     private List<SideCard> sideCardList;
     private List<Camel> camelList;
     private List<Card> deck;
+
+    private Card lastPickedCard;
+    private Camel winner;
+    private boolean gameEnded;
 
     public CamelRaceEngine() {
         sideCardList = new ArrayList<>();
@@ -64,9 +69,50 @@ public class CamelRaceEngine {
         }
     }
 
+    public void nextRound() throws Exception {
+        lastPickedCard = takeRandomCardFromDeck(deck);
+
+        // Get the camel that matches this card
+        Card.CardType cardType = lastPickedCard.getCardType();
+        Camel camel = getCamelByCardType(cardType);
+
+        // Get camel position
+        int position = camel.getPosition();
+        // Put camel one position further
+        position++;
+
+        // If camel is now past the total size of side cards, it wins the game
+        if (position > sideCardList.size()) {
+            gameEnded = true;
+            winner = camel;
+        }
+
+        // Set a new position for this camel
+        camel.setPosition(++position);
+    }
+
+    private Camel getCamelByCardType(Card.CardType type) throws Exception {
+        for (Camel c : camelList) {
+            if (c.getCardType() == c.getCardType()){
+                return c;
+            }
+        }
+        throw new Exception(String.format("Camel with type %s not found!", type.toString()));
+    }
+
+    public GameState generateGameState() {
+        return new GameState(sideCardList, camelList, deck, lastPickedCard);
+    }
+
     private Card takeRandomCardFromDeck(List<Card> deck) {
         int randomNumber = new Random().nextInt(deck.size());
-        Card pickedOutCard = deck.get(randomNumber);
+
+        // Get a non-empty card
+        Card pickedOutCard;
+        do {
+            pickedOutCard = deck.get(randomNumber);
+        } while (pickedOutCard == null);
+
         deck.remove(pickedOutCard);
         return pickedOutCard;
     }
