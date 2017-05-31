@@ -32,11 +32,9 @@ public class SideCard extends Card {
 
     @Override
     public String toString() {
-        return "SideCard{" +
-                "cardType=" + cardType +
-                ", position=" + position +
-                ", cardValue=" + cardValue +
-                ", isVisible=" + isVisible +
-                '}';
+        if (isVisible) {
+            return String.format("SideCard: %s of %s, turned around!", cardValue, cardType);
+        }
+        return String.format("SideCard: %s of %s, invisible.", cardValue, cardType);
     }
 }

@@ -31,10 +31,7 @@ public class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "cardType=" + cardType +
-                ", cardValue=" + cardValue +
-                '}';
+        return String.format("%s of %s", cardValue, cardType);
     }
 
     public enum CardValue {

@@ -22,12 +22,7 @@ public class Camel extends Card {
 
     @Override
     public String toString() {
-        return "Camel{" +
-                "cardType=" + cardType +
-                ", row=" + row +
-                ", position=" + position +
-                ", cardValue=" + cardValue +
-                '}';
+        return String.format("Camel %s: position %s", cardType, position);
     }
 
     public Camel(CardType cardType, int row) {

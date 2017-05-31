@@ -15,6 +15,14 @@ public class GameState {
     private Camel winner;
     private boolean gameEnded;
 
+    public Camel getWinner() {
+        return winner;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
     public List<SideCard> getSideCardList() {
         return sideCardList;
     }

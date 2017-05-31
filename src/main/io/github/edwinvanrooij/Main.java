@@ -8,14 +8,27 @@ public class Main {
         printMap(engine.generateGameState());
 
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 engine.nextRound();
                 printNewRound(i);
-                printMap(engine.generateGameState());
+                GameState gameState = engine.generateGameState();
+                if (gameState.isGameEnded()) {
+                    printWinner(gameState.getWinner());
+                    printMap(gameState);
+                    break;
+                } else {
+                    printMap(gameState);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void printWinner(Camel camel) {
+        System.out.println("===================================");
+        System.out.println(String.format("============ We have a winner! Camel %s! ============",camel));
+        System.out.println("===================================");
     }
 
     private static void printNewRound(int round) {
