@@ -32,7 +32,7 @@ public class Card {
     public enum CardValue {
         ACE,
         TWO,
-        three,
+        THREE,
         FOUR,
         FIVE,
         SIX,
