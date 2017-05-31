@@ -72,10 +72,18 @@ public class CamelRaceEngine {
     public void nextRound() throws Exception {
         lastPickedCard = takeRandomCardFromDeck(deck);
 
+        moveCamelsAccordingToCard(lastPickedCard);
+    }
+
+    private void moveCamelsAccordingToCard(Card card) throws Exception {
         // Get the camel that matches this card
-        Card.CardType cardType = lastPickedCard.getCardType();
+        Card.CardType cardType = card.getCardType();
         Camel camel = getCamelByCardType(cardType);
 
+        moveCamel(camel);
+    }
+
+    private void moveCamel(Camel camel) throws Exception {
         // Get camel position
         int position = camel.getPosition();
         // Put camel one position further
@@ -85,15 +93,49 @@ public class CamelRaceEngine {
         if (position > sideCardList.size()) {
             gameEnded = true;
             winner = camel;
+            return;
         }
 
         // Set a new position for this camel
-        camel.setPosition(++position);
+        camel.setPosition(position);
+
+        handleSideCard(position);
+    }
+
+    private void handleSideCard(int position) throws Exception {
+
+        // Find card at this position
+        for (SideCard card : sideCardList) {
+            if (card.getPosition() == position) {
+
+                // Check if card was turned around yet
+                if (card.isVisible()) {
+                    // Card is visible, do nothing to it
+                    return;
+                }
+
+                // Card is invisible
+                for (Camel c : camelList) {
+                    if (c.getPosition() < position) {
+                        // There's a card below this position, don't turn around
+                        return;
+                    }
+                }
+
+                // All camels have passed this position or are on it, move card around
+                card.setVisible(true);
+
+                moveCamelsAccordingToCard(card);
+
+                // Don't iterate over other positions
+                return;
+            }
+        }
     }
 
     private Camel getCamelByCardType(Card.CardType type) throws Exception {
         for (Camel c : camelList) {
-            if (c.getCardType() == c.getCardType()){
+            if (c.getCardType() == c.getCardType()) {
                 return c;
             }
         }
