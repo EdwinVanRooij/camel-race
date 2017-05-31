@@ -20,6 +20,16 @@ public class Camel extends Card {
         this.position = position;
     }
 
+    @Override
+    public String toString() {
+        return "Camel{" +
+                "cardType=" + cardType +
+                ", row=" + row +
+                ", position=" + position +
+                ", cardValue=" + cardValue +
+                '}';
+    }
+
     public Camel(CardType cardType, int row) {
         super(cardType, CardValue.ACE); // A camel is always an ace
         this.row = row;

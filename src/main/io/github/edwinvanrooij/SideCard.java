@@ -30,4 +30,13 @@ public class SideCard extends Card {
         this.isVisible = false;
     }
 
+    @Override
+    public String toString() {
+        return "SideCard{" +
+                "cardType=" + cardType +
+                ", position=" + position +
+                ", cardValue=" + cardValue +
+                ", isVisible=" + isVisible +
+                '}';
+    }
 }

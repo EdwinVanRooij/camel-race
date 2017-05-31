@@ -5,8 +5,8 @@ package io.github.edwinvanrooij;
  * on 5/31/17.
  */
 public class Card {
-    private CardType cardType;
-    private CardValue cardValue;
+    protected CardType cardType;
+    protected CardValue cardValue;
 
     public CardType getCardType() {
         return cardType;
@@ -27,6 +27,14 @@ public class Card {
     public Card(CardType cardType, CardValue cardValue) {
         this.cardType = cardType;
         this.cardValue = cardValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardType=" + cardType +
+                ", cardValue=" + cardValue +
+                '}';
     }
 
     public enum CardValue {

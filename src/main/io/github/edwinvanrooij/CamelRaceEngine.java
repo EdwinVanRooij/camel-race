@@ -60,7 +60,7 @@ public class CamelRaceEngine {
         deck.addAll(spadesDeck);
 
         // Take 4 random cards from the deck, fill in side cards
-        for (int i = 0; i < 4; i++) {
+        for (int i = 1; i < 5; i++) {
             Card randomCard = takeRandomCardFromDeck(deck);
             SideCard card = new SideCard(randomCard.getCardType(), randomCard.getCardValue(), i);
             sideCardList.add(card);
@@ -70,22 +70,27 @@ public class CamelRaceEngine {
     public void nextRound() throws Exception {
         lastPickedCard = takeRandomCardFromDeck(deck);
 
-        moveCamelsAccordingToCard(lastPickedCard);
+        moveCamelsAccordingToCard(lastPickedCard, true);
     }
 
-    private void moveCamelsAccordingToCard(Card card) throws Exception {
+    private void moveCamelsAccordingToCard(Card card, boolean forward) throws Exception {
         // Get the camel that matches this card
         Card.CardType cardType = card.getCardType();
         Camel camel = getCamelByCardType(cardType);
 
-        moveCamel(camel);
+        moveCamel(camel, forward);
     }
 
-    private void moveCamel(Camel camel) throws Exception {
+    private void moveCamel(Camel camel, boolean forward) throws Exception {
         // Get camel position
         int position = camel.getPosition();
-        // Put camel one position further
-        position++;
+
+        // Put camel one position according to forward or not
+        if (forward) {
+            position++;
+        } else {
+            position--;
+        }
 
         // If camel is now past the total size of side cards, it wins the game
         if (position > sideCardList.size()) {
@@ -123,7 +128,7 @@ public class CamelRaceEngine {
                 // All camels have passed this position or are on it, move card around
                 card.setVisible(true);
 
-                moveCamelsAccordingToCard(card);
+                moveCamelsAccordingToCard(card, false);
 
                 // Don't iterate over other positions
                 return;
@@ -133,7 +138,7 @@ public class CamelRaceEngine {
 
     private Camel getCamelByCardType(Card.CardType type) throws Exception {
         for (Camel c : camelList) {
-            if (c.getCardType() == c.getCardType()) {
+            if (c.getCardType() == type) {
                 return c;
             }
         }
