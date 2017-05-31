@@ -10,7 +10,10 @@ public class GameState {
     private List<SideCard> sideCardList;
     private List<Camel> camelList;
     private List<Card> deck;
+
     private Card lastPickedCard;
+    private Camel winner;
+    private boolean gameEnded;
 
     public List<SideCard> getSideCardList() {
         return sideCardList;
@@ -44,10 +47,12 @@ public class GameState {
         this.lastPickedCard = lastPickedCard;
     }
 
-    public GameState(List<SideCard> sideCardList, List<Camel> camelList, List<Card> deck, Card lastPickedCard) {
+    public GameState(List<SideCard> sideCardList, List<Camel> camelList, List<Card> deck, Card lastPickedCard, Camel winner, boolean gameEnded) {
         this.sideCardList = sideCardList;
         this.camelList = camelList;
         this.deck = deck;
         this.lastPickedCard = lastPickedCard;
+        this.winner = winner;
+        this.gameEnded = gameEnded;
     }
 }

@@ -1,7 +1,5 @@
 package io.github.edwinvanrooij;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -143,7 +141,7 @@ public class CamelRaceEngine {
     }
 
     public GameState generateGameState() {
-        return new GameState(sideCardList, camelList, deck, lastPickedCard);
+        return new GameState(sideCardList, camelList, deck, lastPickedCard, winner, gameEnded);
     }
 
     private Card takeRandomCardFromDeck(List<Card> deck) {
