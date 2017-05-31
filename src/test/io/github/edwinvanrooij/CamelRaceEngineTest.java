@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class CamelRaceEngineTest {
 
-    CamelRaceEngine engine;
+    private CamelRaceEngine engine;
 
     @BeforeEach
     void setUp() {
