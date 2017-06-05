@@ -1,5 +1,6 @@
 package io.github.edwinvanrooij.net;
 
+import io.github.edwinvanrooij.Util;
 import io.github.edwinvanrooij.domain.Game;
 
 import javax.websocket.OnClose;
@@ -21,7 +22,8 @@ public class HostEndpoint {
     @OnOpen
     public void open(Session session) throws IOException {
         Game game = SocketServer.getInstance().createGame();
-        session.getBasicRemote().sendText(String.format("Created game with ID: %s", game.getId()));
+        String message = Util.objectToJson(game);
+        session.getBasicRemote().sendText(message);
     }
 
     @OnClose

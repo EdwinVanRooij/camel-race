@@ -1,5 +1,6 @@
 package io.github.edwinvanrooij.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +29,6 @@ public class Game {
 
     public Game(String id) {
         this.id = id;
-        this.players = players;
+        players = new ArrayList<>();
     }
 }
