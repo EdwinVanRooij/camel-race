@@ -13,21 +13,25 @@ public class ClientEndpoint {
 
     @OnOpen
     public void open(Session session) {
-        System.out.println("Open!");
+        print("open");
     }
 
     @OnClose
     public void close(Session session) {
-        System.out.println("Close!");
+        print("close");
     }
 
     @OnError
     public void onError(Throwable error) {
-        System.out.println("Error!");
+        print(error.getMessage());
     }
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        System.out.println(String.format("Message: %s!", message));
+        print(message);
+    }
+
+    private void print(String message, Object... args) {
+        System.out.printf("ClientEndpoint: " + message + "\n", args);
     }
 }

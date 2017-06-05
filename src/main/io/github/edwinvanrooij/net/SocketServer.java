@@ -19,7 +19,7 @@ public class SocketServer implements Runnable {
 
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);
-        connector.setPort(8080);
+        connector.setPort(8082);
         server.addConnector(connector);
 
         // Setup the basic application "context" for this application at "/"
@@ -34,7 +34,7 @@ public class SocketServer implements Runnable {
 
             // Add WebSocket endpoint to javax.websocket layer
             wscontainer.addEndpoint(HostEndpoint.class);
-//            wscontainer.addEndpoint(HostSocketEndpoint.class);
+            wscontainer.addEndpoint(ClientEndpoint.class);
 
             server.start();
             server.join();
