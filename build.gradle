@@ -31,8 +31,7 @@ dependencies {
 
 jar {
 
-    archiveName = "CamelRace.jar"
-    destinationDir = file('public')
+    archiveName = "../../CamelRace.jar"
 
     from {
         configurations.runtime.collect {
