@@ -32,6 +32,7 @@ dependencies {
 jar {
 
     archiveName = "CamelRace.jar"
+    destinationDir = file('public')
 
     from {
         configurations.runtime.collect {
@@ -42,6 +43,7 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+
 
     manifest {
         attributes 'Main-Class': mainClassName
