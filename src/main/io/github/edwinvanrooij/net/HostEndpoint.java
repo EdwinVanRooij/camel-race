@@ -1,11 +1,14 @@
 package io.github.edwinvanrooij.net;
 
+import io.github.edwinvanrooij.domain.Game;
+
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 /**
  * Created by eddy
@@ -16,8 +19,9 @@ import javax.websocket.server.ServerEndpoint;
 public class HostEndpoint {
 
     @OnOpen
-    public void open(Session session) {
-        print("open");
+    public void open(Session session) throws IOException {
+        Game game = SocketServer.getInstance().createGame();
+        session.getBasicRemote().sendText(String.format("Created game with ID: %s", game.getId()));
     }
 
     @OnClose

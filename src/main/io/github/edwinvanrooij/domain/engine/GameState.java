@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.engine;
+package io.github.edwinvanrooij.domain.engine;
 
 import java.util.List;
 

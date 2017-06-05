@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.engine;
+package io.github.edwinvanrooij.domain.engine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +27,10 @@ public class CamelRaceEngine {
 
     private void init() {
         // Create and add camels to list
-        Camel clubsCamel = new Camel(Card.CardType.CLUBS, 0);
-        Camel diamondsCamel = new Camel(Card.CardType.DIAMONDS, 1);
-        Camel heartsCamel = new Camel(Card.CardType.HEARTS, 2);
-        Camel spadesCamel = new Camel(Card.CardType.SPADES, 3);
+        Camel clubsCamel = new Camel(CardType.CLUBS, 0);
+        Camel diamondsCamel = new Camel(CardType.DIAMONDS, 1);
+        Camel heartsCamel = new Camel(CardType.HEARTS, 2);
+        Camel spadesCamel = new Camel(CardType.SPADES, 3);
         camelList.add(clubsCamel);
         camelList.add(diamondsCamel);
         camelList.add(heartsCamel);
@@ -42,15 +42,15 @@ public class CamelRaceEngine {
         List<Card> heartsDeck = new ArrayList<>();
         List<Card> spadesDeck = new ArrayList<>();
 
-        for (Card.CardValue v : Card.CardValue.values()) {
+        for (CardValue v : CardValue.values()) {
             // Don't add the ace to the (remaining) deck
-            if (v == Card.CardValue.ACE)
+            if (v == CardValue.ACE)
                 continue;
 
-            clubsDeck.add(new Card(Card.CardType.CLUBS, v));
-            diamondsDeck.add(new Card(Card.CardType.DIAMONDS, v));
-            heartsDeck.add(new Card(Card.CardType.HEARTS, v));
-            spadesDeck.add(new Card(Card.CardType.SPADES, v));
+            clubsDeck.add(new Card(CardType.CLUBS, v));
+            diamondsDeck.add(new Card(CardType.DIAMONDS, v));
+            heartsDeck.add(new Card(CardType.HEARTS, v));
+            spadesDeck.add(new Card(CardType.SPADES, v));
         }
 
         // Add all small decks to the total
@@ -75,7 +75,7 @@ public class CamelRaceEngine {
 
     private void moveCamelsAccordingToCard(Card card, boolean forward) throws Exception {
         // Get the camel that matches this card
-        Card.CardType cardType = card.getCardType();
+        CardType cardType = card.getCardType();
         Camel camel = getCamelByCardType(cardType);
 
         moveCamel(camel, forward);
@@ -136,7 +136,7 @@ public class CamelRaceEngine {
         }
     }
 
-    private Camel getCamelByCardType(Card.CardType type) throws Exception {
+    private Camel getCamelByCardType(CardType type) throws Exception {
         for (Camel c : camelList) {
             if (c.getCardType() == type) {
                 return c;

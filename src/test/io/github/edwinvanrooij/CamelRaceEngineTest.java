@@ -1,9 +1,9 @@
 package io.github.edwinvanrooij;
 
-import io.github.edwinvanrooij.engine.Camel;
-import io.github.edwinvanrooij.engine.CamelRaceEngine;
-import io.github.edwinvanrooij.engine.Card;
-import io.github.edwinvanrooij.engine.SideCard;
+import io.github.edwinvanrooij.domain.engine.Camel;
+import io.github.edwinvanrooij.domain.engine.CamelRaceEngine;
+import io.github.edwinvanrooij.domain.engine.Card;
+import io.github.edwinvanrooij.domain.engine.SideCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

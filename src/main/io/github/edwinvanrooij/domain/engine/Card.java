@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.engine;
+package io.github.edwinvanrooij.domain.engine;
 
 /**
  * Created by eddy
@@ -32,28 +32,5 @@ public class Card {
     @Override
     public String toString() {
         return String.format("%s of %s", cardValue, cardType);
-    }
-
-    public enum CardValue {
-        ACE,
-        TWO,
-        THREE,
-        FOUR,
-        FIVE,
-        SIX,
-        SEVEN,
-        EIGHT,
-        NINE,
-        TEN,
-        JACK,
-        QUEEN,
-        KING,
-    }
-
-    public enum CardType {
-        CLUBS,
-        DIAMONDS,
-        HEARTS,
-        SPADES,
     }
 }

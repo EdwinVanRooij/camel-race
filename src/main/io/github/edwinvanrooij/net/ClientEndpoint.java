@@ -28,7 +28,7 @@ public class ClientEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        print(message);
+        print(message + " from " + session.getId());
     }
 
     private void print(String message, Object... args) {
