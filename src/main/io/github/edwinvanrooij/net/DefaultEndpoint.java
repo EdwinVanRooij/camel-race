@@ -28,7 +28,7 @@ public class DefaultEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        print(message + " from " + session.getId());
+        print(message);
     }
 
     private void print(String message, Object... args) {

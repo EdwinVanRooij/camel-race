@@ -1,7 +1,9 @@
 package io.github.edwinvanrooij.net;
 
 import com.google.gson.Gson;
+import io.github.edwinvanrooij.domain.Event;
 import io.github.edwinvanrooij.domain.Game;
+import io.github.edwinvanrooij.domain.Player;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -143,5 +145,10 @@ public class SocketServer implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void handlePlayerJoinRequest(Event e) {
+        PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) e.getValue();
+        System.out.println(String.format("Adding player %s in backend to game id %s", playerJoinRequest.getPlayer(), playerJoinRequest.getGameId()));
     }
 }
