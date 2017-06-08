@@ -31,8 +31,8 @@ public class ClientEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        SocketServer.getInstance().handleMessage(message, session);
         print(message, "from handleMessage");
+        SocketServer.getInstance().handleMessage(message, session);
     }
 
     @SuppressWarnings("SameParameterValue")

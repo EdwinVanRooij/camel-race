@@ -14,16 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * on 6/5/17.
  */
 public class Game {
-    private static AtomicInteger nextId;
+    private static AtomicInteger nextId = new AtomicInteger();
 
     private HashMap<Player, Bid> bids;
     private String id;
     private List<Player> players;
-    private Session session;
-
-    public Session getSession() {
-        return session;
-    }
 
     public String getId() {
         return id;
@@ -53,7 +48,7 @@ public class Game {
 
     public Player addPlayer(Player player, Session session) {
         int uniqueId = nextId.incrementAndGet();
-        Player playerWithId = new Player(uniqueId, player.getName(), session);
+        Player playerWithId = new Player(uniqueId, player.getName());
         players.add(playerWithId);
         return playerWithId;
     }
@@ -65,5 +60,14 @@ public class Game {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "bids=" + bids +
+                ", id='" + id + '\'' +
+                ", players=" + players +
+                '}';
     }
 }

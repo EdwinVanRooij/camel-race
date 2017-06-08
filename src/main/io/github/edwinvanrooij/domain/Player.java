@@ -9,7 +9,6 @@ import javax.websocket.Session;
 public class Player {
     private int id;
     private String name;
-    private Session session;
 
     public int getId() {
         return id;
@@ -23,14 +22,6 @@ public class Player {
         this.name = name;
     }
 
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
     public Player(int id, String name) {
         this.id = id;
         this.name = name;
@@ -41,13 +32,6 @@ public class Player {
         return "Player{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", session=" + session +
                 '}';
-    }
-
-    public Player(int id, String name, Session session) {
-        this.id = id;
-        this.name = name;
-        this.session = session;
     }
 }

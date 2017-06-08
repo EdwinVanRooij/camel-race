@@ -39,6 +39,8 @@ public class SocketServer implements Runnable {
     private SocketServer() {
     }
 
+
+
     private GameManager gameManager = new GameManager();
 
     @Override
@@ -97,6 +99,7 @@ public class SocketServer implements Runnable {
             switch (event.getEventType()) {
 
                 case Event.KEY_GAME_CREATE: {
+                    System.out.println(String.format("session in handleMessage socketserver: %s", session));
                     Game game = gameManager.createGame(session);
                     sendMessage(Event.KEY_GAME_CREATED, game, session);
                     break;
@@ -109,7 +112,8 @@ public class SocketServer implements Runnable {
                     sendMessage(Event.KEY_PLAYER_JOINED, player, session);
 
                     Game game = gameManager.getGameById(gameId);
-                    sendMessage(Event.KEY_PLAYER_JOINED, player, game.getSession());
+                    System.out.println(String.format("Got this game: %s", game.toString()));
+                    sendMessage(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
                     break;
                 }
 
@@ -127,10 +131,11 @@ public class SocketServer implements Runnable {
 
     private void sendMessage(String eventType, Object value, Session session) {
         try {
+            System.out.println(String.format("About to send '%s' with object '%s'", eventType, value));
             Event event = new Event(eventType, value);
             String message = Util.objectToJson(event);
-            session.getBasicRemote().sendText(message);
             System.out.println(String.format("Sending: %s", message));
+            session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             e.printStackTrace();
         }

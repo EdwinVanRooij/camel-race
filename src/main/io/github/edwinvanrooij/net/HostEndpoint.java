@@ -36,8 +36,9 @@ public class HostEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        SocketServer.getInstance().handleMessage(message, session);
         print(message, "from handleMessage");
+        System.out.println(String.format("session in handleMessage hostEndpoint: %s", session));
+        SocketServer.getInstance().handleMessage(message, session);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -46,7 +47,7 @@ public class HostEndpoint {
     }
 
     private void print(String message) {
-        System.out.println("HostEndpoint" + message);
+        System.out.println("HostEndpoint: " + message);
     }
 }
 

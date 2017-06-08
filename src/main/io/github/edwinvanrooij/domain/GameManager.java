@@ -10,15 +10,19 @@ import java.util.*;
  */
 public class GameManager {
     private List<Game> games;
+    private Map<String, Session> gameSessionMap;
 
     public GameManager() {
         games = new ArrayList<>();
+        gameSessionMap = new HashMap<>();
     }
 
     public Game createGame(Session session) {
         String id = generateUniqueId();
         Game game = new Game(id, session);
         games.add(game);
+        gameSessionMap.put(game.getId(), session);
+        System.out.println(String.format("Created game: %s (in createGame in manager)", game));
         return game;
     }
 
@@ -49,9 +53,13 @@ public class GameManager {
         return sb.toString();
     }
 
+    public Session getSessionByGameId(String id) {
+        return gameSessionMap.get(id);
+    }
     public Game getGameById(String id) {
         for (Game game : games) {
             if (Objects.equals(game.getId(), id)) {
+                System.out.println(String.format("getGameById returns %s", game));
                 return game;
             }
         }
