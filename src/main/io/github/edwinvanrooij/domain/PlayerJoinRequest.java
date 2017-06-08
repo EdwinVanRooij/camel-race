@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.net;
+package io.github.edwinvanrooij.domain;
 
 import io.github.edwinvanrooij.domain.Player;
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.github.edwinvanrooij.domain.Event;
 import io.github.edwinvanrooij.domain.Game;
 import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.PlayerJoinRequest;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -35,54 +36,9 @@ public class SocketServer implements Runnable {
         return ourInstance;
     }
 
-    private List<Game> games;
-
     private SocketServer() {
-        games = new ArrayList<>();
     }
 
-    public Game createGame() {
-        String id = generateUniqueId();
-        Game game = new Game(id);
-        games.add(game);
-        return game;
-    }
-
-    private String generateUniqueId() {
-        String id;
-        do {
-            id = generateId();
-        } while (gameWithIdExists(id));
-
-        return id;
-    }
-
-    private String generateId() {
-        char[] vowels = "aeiouy".toCharArray(); // klinkers
-        char[] consonants = "bcdfghjklmnpqrstvwxz".toCharArray(); // medeklinkers
-
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 4; i++) {
-            char c;
-            if (i % 2 == 1) {
-                c = vowels[random.nextInt(vowels.length)];
-            } else {
-                c = consonants[random.nextInt(consonants.length)];
-            }
-            sb.append(c);
-        }
-        return sb.toString();
-    }
-
-    private boolean gameWithIdExists(String id) {
-        for (Game g : games) {
-            if (Objects.equals(g.getId(), id)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public void run() {
@@ -120,21 +76,7 @@ public class SocketServer implements Runnable {
             handlers.setHandlers(new Handler[]{context, new DefaultHandler()});
 
             server.setHandler(handlers);
-//        Server server = new Server();
-//        ServerConnector connector = new ServerConnector(server);
-//        connector.setHost("0.0.0.0");
-//        connector.setPort(8082);
-//        server.addConnector(connector);
-//
-//        // Setup the basic application "context" for this application at "/"
-//        // This is also known as the handler tree (in jetty speak)
-//        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-//        context.setContextPath("/");
-//
-//        server.setHandler(context);
-//
-//        try {
-//            // Initialize javax.websocket layer
+
             ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(context);
             wscontainer.addEndpoint(HostEndpoint.class);
             wscontainer.addEndpoint(ClientEndpoint.class);
@@ -147,8 +89,18 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void handlePlayerJoinRequest(Event e) {
-        PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) e.getValue();
-        System.out.println(String.format("Adding player %s in backend to game id %s", playerJoinRequest.getPlayer(), playerJoinRequest.getGameId()));
+    public void handleEvent(Event e) {
+        switch (e.getEventType()) {
+            case Event.GAME_ID:
+                System.out.println("Event: Game id");
+                break;
+            case Event.PLAYER_JOINED:
+                System.out.println("Event: Player joined");
+                PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) e.getValue();
+                System.out.println(String.format("Adding player %s in backend to game id %s", playerJoinRequest.getPlayer(), playerJoinRequest.getGameId()));
+                break;
+        }
+
     }
+
 }
