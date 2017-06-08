@@ -19,6 +19,11 @@ public class Game {
     private HashMap<Player, Bid> bids;
     private String id;
     private List<Player> players;
+    private Session session;
+
+    public Session getSession() {
+        return session;
+    }
 
     public String getId() {
         return id;
@@ -36,7 +41,7 @@ public class Game {
         this.players = players;
     }
 
-    public Game(String id) {
+    public Game(String id, Session session) {
         this.id = id;
         players = new ArrayList<>();
         bids = new HashMap<>();

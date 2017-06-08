@@ -15,9 +15,9 @@ public class GameManager {
         games = new ArrayList<>();
     }
 
-    public Game createGame() {
+    public Game createGame(Session session) {
         String id = generateUniqueId();
-        Game game = new Game(id);
+        Game game = new Game(id, session);
         games.add(game);
         return game;
     }
@@ -49,7 +49,7 @@ public class GameManager {
         return sb.toString();
     }
 
-    private Game getGameById(String id) {
+    public Game getGameById(String id) {
         for (Game game : games) {
             if (Objects.equals(game.getId(), id)) {
                 return game;

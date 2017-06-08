@@ -96,15 +96,20 @@ public class SocketServer implements Runnable {
 
             switch (event.getEventType()) {
 
-                case Event.KEY_GAME_CREATE:
-                    Game game = gameManager.createGame();
+                case Event.KEY_GAME_CREATE: {
+                    Game game = gameManager.createGame(session);
                     sendMessage(Event.KEY_GAME_CREATED, game, session);
                     break;
+                }
 
                 case Event.KEY_PLAYER_JOIN: {
                     PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) event.getValue();
-                    Player player = gameManager.playerJoin(playerJoinRequest.getGameId(), playerJoinRequest.getPlayer(), session);
+                    String gameId = playerJoinRequest.getGameId();
+                    Player player = gameManager.playerJoin(gameId, playerJoinRequest.getPlayer(), session);
                     sendMessage(Event.KEY_PLAYER_JOINED, player, session);
+
+                    Game game = gameManager.getGameById(gameId);
+                    sendMessage(Event.KEY_PLAYER_JOINED, player, game.getSession());
                     break;
                 }
 
