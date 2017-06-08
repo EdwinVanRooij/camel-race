@@ -1,9 +1,12 @@
 package io.github.edwinvanrooij.net;
 
-import io.github.edwinvanrooij.domain.Event;
+import io.github.edwinvanrooij.Util;
 import io.github.edwinvanrooij.domain.Game;
-import io.github.edwinvanrooij.domain.eventvalues.PlayerJoinRequest;
+import io.github.edwinvanrooij.domain.GameManager;
 import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.events.Event;
+import io.github.edwinvanrooij.domain.events.PlayerJoinRequest;
+import io.github.edwinvanrooij.domain.events.PlayerNewBid;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -16,7 +19,9 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
 import javax.servlet.DispatcherType;
+import javax.websocket.Session;
 import javax.websocket.server.ServerContainer;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -34,6 +39,7 @@ public class SocketServer implements Runnable {
     private SocketServer() {
     }
 
+    private GameManager gameManager = new GameManager();
 
     @Override
     public void run() {
@@ -84,18 +90,44 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void handleEvent(Event e) {
-        switch (e.getEventType()) {
-//            case Event.GAME_ID:
-//                System.out.println("Event: Game id");
-//                break;
-//            case Event.PLAYER_JOINED:
-//                System.out.println("Event: Player joined");
-//                PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) e.getValue();
-//                System.out.println(String.format("Adding player %s in backend to game id %s", playerJoinRequest.getPlayer(), playerJoinRequest.getGameId()));
-//                break;
-        }
+    public void handleMessage(String message, Session session) {
+        try {
+            Event event = Util.jsonToEvent(message);
 
+            switch (event.getEventType()) {
+
+                case Event.KEY_GAME_CREATE:
+                    Game game = gameManager.createGame();
+                    sendMessage(Event.KEY_GAME_CREATED, game, session);
+                    break;
+
+                case Event.KEY_PLAYER_JOIN: {
+                    PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) event.getValue();
+                    Player player = gameManager.playerJoin(playerJoinRequest.getGameId(), playerJoinRequest.getPlayer(), session);
+                    sendMessage(Event.KEY_PLAYER_JOINED, player, session);
+                    break;
+                }
+
+                case Event.KEY_PLAYER_NEW_BID: {
+                    PlayerNewBid playerNewBid = (PlayerNewBid) event.getValue();
+                    Boolean result = gameManager.playerNewBid(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getCamel(), playerNewBid.getValue());
+                    sendMessage(Event.KEY_PLAYER_BID_HANDED_IN, result, session);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void sendMessage(String eventType, Object value, Session session) {
+        try {
+            Event event = new Event(eventType, value);
+            String message = Util.objectToJson(event);
+            session.getBasicRemote().sendText(message);
+            System.out.println(String.format("Sending: %s", message));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

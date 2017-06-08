@@ -1,7 +1,7 @@
 package io.github.edwinvanrooij.net;
 
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.domain.Event;
+import io.github.edwinvanrooij.domain.events.Event;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -31,24 +31,22 @@ public class ClientEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        try {
-            Event e = Util.jsonToEvent(message);
-//            SocketServer.getInstance().handlePlayerJoinRequest(e);
+        SocketServer.getInstance().handleMessage(message, session);
+        print(message, "from handleMessage");
+    }
 
-            print(e.toString());
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+    @SuppressWarnings("SameParameterValue")
+    private void print(String message, String extra) {
+        System.out.printf("ClientEndpoint (%s): %s\n", message, extra);
+    }
 
+    private void print(String message) {
+        System.out.println("ClientEndpoint" + message);
+    }
+}
 //        Game game = SocketServer.getInstance().createGame();
 //        Event e = new Event(Event.GAME_ID, game);
 //        String message = Util.objectToJson(e);
 //
 //        System.out.println(String.format("Sending: %s", message));
 //        session.getBasicRemote().sendText(message);
-    }
-
-    private void print(String message, Object... args) {
-        System.out.printf("ClientEndpoint: " + message + "\n", args);
-    }
-}

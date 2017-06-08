@@ -1,9 +1,7 @@
 package io.github.edwinvanrooij.net;
 
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.domain.Event;
-import io.github.edwinvanrooij.domain.Game;
-import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.events.Event;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -23,19 +21,7 @@ public class HostEndpoint {
 
     @OnOpen
     public void open(Session session) throws IOException {
-//        Game game = SocketServer.getInstance().createGame();
-//        Event e = new Event(Event.GAME_ID, game);
-//        String message = Util.objectToJson(e);
-//
-//        System.out.println(String.format("Sending: %s", message));
-//        session.getBasicRemote().sendText(message);
-//
-//        Player player = new Player(1, "PlayerOne");
-//        Event playerEvent = new Event(Event.PLAYER_JOINED, player);
-//        String playerMessage = Util.objectToJson(playerEvent);
-//
-//        System.out.println(String.format("Sending: %s", playerMessage));
-//        session.getBasicRemote().sendText(playerMessage);
+        print("open");
     }
 
     @OnClose
@@ -50,10 +36,19 @@ public class HostEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        print(message);
+        SocketServer.getInstance().handleMessage(message, session);
+        print(message, "from handleMessage");
     }
 
-    private void print(String message, Object... args) {
-        System.out.printf("HostEndpoint: " + message + "\n", args);
+    @SuppressWarnings("SameParameterValue")
+    private void print(String message, String extra) {
+        System.out.printf("HostEndpoint (%s): %s\n", message, extra);
+    }
+
+    private void print(String message) {
+        System.out.println("HostEndpoint" + message);
     }
 }
+
+
+

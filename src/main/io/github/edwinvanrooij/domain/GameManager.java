@@ -1,9 +1,9 @@
 package io.github.edwinvanrooij.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import io.github.edwinvanrooij.domain.engine.Camel;
+
+import javax.websocket.Session;
+import java.util.*;
 
 /**
  * Created by eddy on 6/8/17.
@@ -14,6 +14,7 @@ public class GameManager {
     public GameManager() {
         games = new ArrayList<>();
     }
+
     public Game createGame() {
         String id = generateUniqueId();
         Game game = new Game(id);
@@ -28,10 +29,6 @@ public class GameManager {
         } while (gameWithIdExists(id));
 
         return id;
-    }
-
-    private void addPlayerToGame() {
-
     }
 
     private String generateId() {
@@ -52,12 +49,44 @@ public class GameManager {
         return sb.toString();
     }
 
-    private boolean gameWithIdExists(String id) {
-        for (Game g : games) {
-            if (Objects.equals(g.getId(), id)) {
-                return true;
+    private Game getGameById(String id) {
+        for (Game game : games) {
+            if (Objects.equals(game.getId(), id)) {
+                return game;
             }
         }
-        return false;
+        return null;
+    }
+
+    private boolean gameWithIdExists(String id) {
+        Game game = getGameById(id);
+        return game != null;
+    }
+
+    public Player playerJoin(String gameId, Player player, Session session) {
+        Game game = getGameById(gameId);
+
+        if (game == null) {
+            return null;
+        }
+
+        return game.addPlayer(player, session);
+    }
+
+    public boolean playerNewBid(String gameId, Player player, Camel camel, int value) {
+        Game game = getGameById(gameId);
+
+        if (game == null) {
+            return false;
+        }
+
+        Player playerWithAttributes = game.getPlayer(player.getId());
+
+        if (playerWithAttributes == null) {
+            return false;
+        }
+
+        game.newBid(player, camel, value);
+        return true;
     }
 }
