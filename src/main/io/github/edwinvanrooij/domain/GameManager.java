@@ -10,7 +10,9 @@ import java.util.*;
  */
 public class GameManager {
     private List<Game> games;
+
     private Map<String, Session> gameSessionMap;
+    private Map<Integer, Session> playerSessionMap;
 
     public GameManager() {
         games = new ArrayList<>();
@@ -56,6 +58,9 @@ public class GameManager {
     public Session getSessionByGameId(String id) {
         return gameSessionMap.get(id);
     }
+    public Session getSessionByPlayerId(int id) {
+        return playerSessionMap.get(id);
+    }
     public Game getGameById(String id) {
         for (Game game : games) {
             if (Objects.equals(game.getId(), id)) {
@@ -78,8 +83,10 @@ public class GameManager {
             return null;
         }
 
-        return game.addPlayer(player, session);
+        playerSessionMap.put(player.getId(), session);
+        return game.addPlayer(player);
     }
+
 
     public boolean playerNewBid(String gameId, Player player, Camel camel, int value) {
         Game game = getGameById(gameId);

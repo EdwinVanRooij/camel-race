@@ -46,7 +46,7 @@ public class Game {
         bids.put(player, new Bid(camel, value));
     }
 
-    public Player addPlayer(Player player, Session session) {
+    public Player addPlayer(Player player) {
         int uniqueId = nextId.incrementAndGet();
         Player playerWithId = new Player(uniqueId, player.getName());
         players.add(playerWithId);
