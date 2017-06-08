@@ -23,19 +23,19 @@ public class HostEndpoint {
 
     @OnOpen
     public void open(Session session) throws IOException {
-        Game game = SocketServer.getInstance().createGame();
-        Event e = new Event(Event.GAME_ID, game);
-        String message = Util.objectToJson(e);
-
-        System.out.println(String.format("Sending: %s", message));
-        session.getBasicRemote().sendText(message);
-
-        Player player =  new Player(1, "PlayerOne");
-        Event playerEvent = new Event(Event.PLAYER_JOINED, player);
-        String playerMessage = Util.objectToJson(playerEvent);
-
-        System.out.println(String.format("Sending: %s", playerMessage));
-        session.getBasicRemote().sendText(playerMessage);
+//        Game game = SocketServer.getInstance().createGame();
+//        Event e = new Event(Event.GAME_ID, game);
+//        String message = Util.objectToJson(e);
+//
+//        System.out.println(String.format("Sending: %s", message));
+//        session.getBasicRemote().sendText(message);
+//
+//        Player player = new Player(1, "PlayerOne");
+//        Event playerEvent = new Event(Event.PLAYER_JOINED, player);
+//        String playerMessage = Util.objectToJson(playerEvent);
+//
+//        System.out.println(String.format("Sending: %s", playerMessage));
+//        session.getBasicRemote().sendText(playerMessage);
     }
 
     @OnClose

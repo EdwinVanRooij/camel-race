@@ -33,7 +33,7 @@ public class ClientEndpoint {
     public void handleMessage(String message, Session session) {
         try {
             Event e = Util.jsonToEvent(message);
-            SocketServer.getInstance().handlePlayerJoinRequest(e);
+//            SocketServer.getInstance().handlePlayerJoinRequest(e);
 
             print(e.toString());
         } catch (Exception e1) {
