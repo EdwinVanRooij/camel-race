@@ -1,12 +1,10 @@
 package io.github.edwinvanrooij.net;
 
-import com.google.gson.Gson;
 import io.github.edwinvanrooij.domain.Event;
 import io.github.edwinvanrooij.domain.Game;
-import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.eventvalues.PlayerJoinRequest;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -15,11 +13,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
-import javax.servlet.ServletException;
 import javax.websocket.server.ServerContainer;
 import java.util.*;
 

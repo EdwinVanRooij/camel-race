@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.net;
+package io.github.edwinvanrooij.domain.eventvalues;
 
 import io.github.edwinvanrooij.domain.Player;
 

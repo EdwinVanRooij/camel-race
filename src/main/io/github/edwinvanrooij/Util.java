@@ -4,8 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.edwinvanrooij.domain.Event;
-import io.github.edwinvanrooij.domain.Player;
-import io.github.edwinvanrooij.net.PlayerJoinRequest;
+import io.github.edwinvanrooij.domain.eventvalues.PlayerJoinRequest;
 
 /**
  * Created by eddy
