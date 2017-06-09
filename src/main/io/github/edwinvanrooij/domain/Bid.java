@@ -1,22 +1,15 @@
 package io.github.edwinvanrooij.domain;
 
 import io.github.edwinvanrooij.domain.engine.Camel;
+import io.github.edwinvanrooij.domain.engine.CardType;
 
 /**
  * Created by eddy
  * on 6/8/17.
  */
 public class Bid {
-    private Camel camel;
+    private CardType type;
     private int value;
-
-    public Camel getCamel() {
-        return camel;
-    }
-
-    public void setCamel(Camel camel) {
-        this.camel = camel;
-    }
 
     public int getValue() {
         return value;
@@ -26,8 +19,17 @@ public class Bid {
         this.value = value;
     }
 
-    public Bid(Camel camel, int value) {
-        this.camel = camel;
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "type=" + type +
+                ", value=" + value +
+                '}';
+    }
+
+    public Bid(CardType type, int value) {
+        this.type = type;
         this.value = value;
     }
 }
+

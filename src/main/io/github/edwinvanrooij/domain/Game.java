@@ -3,10 +3,7 @@ package io.github.edwinvanrooij.domain;
 import io.github.edwinvanrooij.domain.engine.Camel;
 
 import javax.websocket.Session;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -19,6 +16,8 @@ public class Game {
     private HashMap<Player, Bid> bids;
     private String id;
     private List<Player> players;
+
+    private Map<String, String> funMap = new HashMap<>();
 
     public String getId() {
         return id;
@@ -40,15 +39,34 @@ public class Game {
         this.id = id;
         players = new ArrayList<>();
         bids = new HashMap<>();
+
+        funMap.put("rik", "LIMONCEEEELLLOO");
+        funMap.put("tom", "ALLAHU AKBAR");
+        funMap.put("tommeh", "ALLAHU AKBAR");
+        funMap.put("yoeri", "Bob");
+        funMap.put("bob", "Bobbeh");
+        funMap.put("fons", "Der Foenzel");
+        funMap.put("edwin", "Der Eddymeister");
+        funMap.put("lars", "Jongens mag ik een emmer?");
+        funMap.put("dennis", "Ja doe mij maar skere wodka");
     }
 
-    public void newBid(Player player, Camel camel, int value) {
-        bids.put(player, new Bid(camel, value));
+    public void newBid(Player player, Bid bid) {
+        bids.put(player, bid);
+    }
+
+    private String funName(String string) {
+        if (funMap.get(string) != null) {
+            return funMap.get(string);
+        }
+        return string;
     }
 
     public Player addPlayer(Player player) {
         int uniqueId = nextId.incrementAndGet();
-        Player playerWithId = new Player(uniqueId, player.getName());
+
+        Player playerWithId = new Player(uniqueId, funName(player.getName()));
+
         players.add(playerWithId);
         return playerWithId;
     }

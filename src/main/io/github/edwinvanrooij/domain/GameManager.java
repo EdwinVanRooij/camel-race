@@ -17,6 +17,7 @@ public class GameManager {
     public GameManager() {
         games = new ArrayList<>();
         gameSessionMap = new HashMap<>();
+        playerSessionMap = new HashMap<>();
     }
 
     public Game createGame(Session session) {
@@ -88,7 +89,7 @@ public class GameManager {
     }
 
 
-    public boolean playerNewBid(String gameId, Player player, Camel camel, int value) {
+    public boolean playerNewBid(String gameId, Player player, Bid bid) {
         Game game = getGameById(gameId);
 
         if (game == null) {
@@ -101,7 +102,7 @@ public class GameManager {
             return false;
         }
 
-        game.newBid(player, camel, value);
+        game.newBid(player,bid);
         return true;
     }
 }

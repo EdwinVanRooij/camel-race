@@ -119,8 +119,11 @@ public class SocketServer implements Runnable {
 
                 case Event.KEY_PLAYER_NEW_BID: {
                     PlayerNewBid playerNewBid = (PlayerNewBid) event.getValue();
-                    Boolean result = gameManager.playerNewBid(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getCamel(), playerNewBid.getValue());
+                    Boolean result = gameManager.playerNewBid(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
                     sendMessage(Event.KEY_PLAYER_BID_HANDED_IN, result, session);
+
+                    Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
+                    sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
                 }
 
             }
