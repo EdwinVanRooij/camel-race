@@ -37,7 +37,6 @@ public class HostEndpoint {
     @OnMessage
     public void handleMessage(String message, Session session) {
         print(message, "from handleMessage");
-        System.out.println(String.format("session in handleMessage hostEndpoint: %s", session));
         SocketServer.getInstance().handleMessage(message, session);
     }
 

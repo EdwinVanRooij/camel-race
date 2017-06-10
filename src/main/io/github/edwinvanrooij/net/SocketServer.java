@@ -5,6 +5,7 @@ import io.github.edwinvanrooij.domain.Game;
 import io.github.edwinvanrooij.domain.GameManager;
 import io.github.edwinvanrooij.domain.Player;
 import io.github.edwinvanrooij.domain.events.Event;
+import io.github.edwinvanrooij.domain.events.GameStart;
 import io.github.edwinvanrooij.domain.events.PlayerJoinRequest;
 import io.github.edwinvanrooij.domain.events.PlayerNewBid;
 import org.eclipse.jetty.server.Handler;
@@ -99,7 +100,6 @@ public class SocketServer implements Runnable {
             switch (event.getEventType()) {
 
                 case Event.KEY_GAME_CREATE: {
-                    System.out.println(String.format("session in handleMessage socketserver: %s", session));
                     Game game = gameManager.createGame(session);
                     sendMessage(Event.KEY_GAME_CREATED, game, session);
                     break;
@@ -126,6 +126,15 @@ public class SocketServer implements Runnable {
                     sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
                 }
 
+                case Event.KEY_GAME_START: {
+                    GameStart gameStart = (GameStart) event.getValue();
+                    Game game = gameManager.getGameById(gameStart.getId());
+                    sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, game.generateGameState(), session);
+
+                    List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
+                    sendMessages(Event.KEY_GAME_STARTED, null, playerSessions);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,6 +148,20 @@ public class SocketServer implements Runnable {
             String message = Util.objectToJson(event);
             System.out.println(String.format("Sending: %s", message));
             session.getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void sendMessages(String eventType, Object value, List<Session> sessionList) {
+        try {
+            System.out.println(String.format("About to send messages '%s' with object '%s'", eventType, value));
+            Event event = new Event(eventType, value);
+            String message = Util.objectToJson(event);
+            System.out.println(String.format("Sending messages: %s", message));
+
+            for (Session session : sessionList) {
+                session.getBasicRemote().sendText(message);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

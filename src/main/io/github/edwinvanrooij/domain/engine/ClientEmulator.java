@@ -1,5 +1,7 @@
 package io.github.edwinvanrooij.domain.engine;
 
+import io.github.edwinvanrooij.domain.Game;
+
 /**
  * Created by eddy
  * on 6/5/17.
@@ -7,7 +9,7 @@ package io.github.edwinvanrooij.domain.engine;
 public class ClientEmulator implements Runnable {
     @Override
     public void run() {
-        CamelRaceEngine engine = new CamelRaceEngine();
+        Game engine = new Game();
 
         printMap(engine.generateGameState());
 

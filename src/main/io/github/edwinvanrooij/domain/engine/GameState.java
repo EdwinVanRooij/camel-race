@@ -1,5 +1,7 @@
 package io.github.edwinvanrooij.domain.engine;
 
+import io.github.edwinvanrooij.domain.Game;
+
 import java.util.List;
 
 /**

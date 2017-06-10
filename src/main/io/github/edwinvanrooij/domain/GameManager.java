@@ -22,7 +22,7 @@ public class GameManager {
 
     public Game createGame(Session session) {
         String id = generateUniqueId();
-        Game game = new Game(id, session);
+        Game game = new Game(id);
         games.add(game);
         gameSessionMap.put(game.getId(), session);
         System.out.println(String.format("Created game: %s (in createGame in manager)", game));
@@ -104,5 +104,15 @@ public class GameManager {
 
         game.newBid(player,bid);
         return true;
+    }
+
+    public List<Session> getPlayerSessionsByGame(Game game) {
+        List<Session> sessions = new ArrayList<>();
+
+        for (Player player : game.getPlayers()) {
+            sessions.add(playerSessionMap.get(player.getId()));
+        }
+
+        return sessions;
     }
 }
