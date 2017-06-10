@@ -4,6 +4,7 @@ import io.github.edwinvanrooij.Util;
 import io.github.edwinvanrooij.domain.Game;
 import io.github.edwinvanrooij.domain.GameManager;
 import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.engine.GameState;
 import io.github.edwinvanrooij.domain.events.Event;
 import io.github.edwinvanrooij.domain.events.GameStart;
 import io.github.edwinvanrooij.domain.events.PlayerJoinRequest;
@@ -124,15 +125,27 @@ public class SocketServer implements Runnable {
 
                     Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
                     sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
+                    break;
                 }
 
                 case Event.KEY_GAME_START: {
                     GameStart gameStart = (GameStart) event.getValue();
                     Game game = gameManager.getGameById(gameStart.getId());
-                    sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, game.generateGameState(), session);
+                    GameState currentGameState = game.generateGameState();
+                    sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
 
                     List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
-                    sendMessages(Event.KEY_GAME_STARTED, null, playerSessions);
+                    sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
+
+                    while (!currentGameState.isGameEnded()) {
+                        Thread.sleep(2000);
+                        game.nextRound();
+                        currentGameState = game.generateGameState();
+                        sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
+                    }
+
+                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, "", session);
+                    break;
                 }
 
             }
