@@ -4,6 +4,7 @@ import io.github.edwinvanrooij.Util;
 import io.github.edwinvanrooij.domain.Game;
 import io.github.edwinvanrooij.domain.GameManager;
 import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.engine.GameResults;
 import io.github.edwinvanrooij.domain.engine.GameState;
 import io.github.edwinvanrooij.domain.events.Event;
 import io.github.edwinvanrooij.domain.events.GameStart;
@@ -40,7 +41,6 @@ public class SocketServer implements Runnable {
 
     private SocketServer() {
     }
-
 
 
     private GameManager gameManager = new GameManager();
@@ -138,13 +138,15 @@ public class SocketServer implements Runnable {
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
 
                     while (!currentGameState.isGameEnded()) {
-                        Thread.sleep(2000);
+                        Thread.sleep(20);
                         game.nextRound();
                         currentGameState = game.generateGameState();
                         sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
                     }
 
-                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, "", session);
+                    GameResults gameResults = game.generateGameResults();
+                    System.out.println("Results before going in send message: " + gameResults.toString());
+                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, gameResults, session);
                     break;
                 }
 
@@ -165,18 +167,22 @@ public class SocketServer implements Runnable {
             e.printStackTrace();
         }
     }
-    private void sendMessages(String eventType, Object value, List<Session> sessionList) {
-        try {
-            System.out.println(String.format("About to send messages '%s' with object '%s'", eventType, value));
-            Event event = new Event(eventType, value);
-            String message = Util.objectToJson(event);
-            System.out.println(String.format("Sending messages: %s", message));
 
-            for (Session session : sessionList) {
+    private void sendMessages(String eventType, Object value, List<Session> sessionList) {
+        System.out.println(String.format("About to send messages '%s' with object '%s'", eventType, value));
+        Event event = new Event(eventType, value);
+        String message = Util.objectToJson(event);
+        System.out.println(String.format("Sending messages: %s", message));
+
+        for (Session session : sessionList) {
+            try {
                 session.getBasicRemote().sendText(message);
+                System.out.println(String.format("Successfully sent message to %s", session.getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                System.out.println("Could not send message nullpointer on session");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.edwinvanrooij.domain;
 
 import io.github.edwinvanrooij.domain.engine.Camel;
+import io.github.edwinvanrooij.domain.engine.GameResults;
 
 import javax.websocket.Session;
 import java.util.*;
@@ -59,9 +60,11 @@ public class GameManager {
     public Session getSessionByGameId(String id) {
         return gameSessionMap.get(id);
     }
+
     public Session getSessionByPlayerId(int id) {
         return playerSessionMap.get(id);
     }
+
     public Game getGameById(String id) {
         for (Game game : games) {
             if (Objects.equals(game.getId(), id)) {
@@ -84,8 +87,9 @@ public class GameManager {
             return null;
         }
 
-        playerSessionMap.put(player.getId(), session);
-        return game.addPlayer(player);
+        Player playerWithId = game.addPlayer(player);
+        playerSessionMap.put(playerWithId.getId(), session);
+        return playerWithId;
     }
 
 
@@ -102,7 +106,7 @@ public class GameManager {
             return false;
         }
 
-        game.newBid(player,bid);
+        game.newBid(player, bid);
         return true;
     }
 
@@ -110,7 +114,9 @@ public class GameManager {
         List<Session> sessions = new ArrayList<>();
 
         for (Player player : game.getPlayers()) {
-            sessions.add(playerSessionMap.get(player.getId()));
+            System.out.println(String.format("player %s in get playersessionsbygame", player));
+            Session session = getSessionByPlayerId(player.getId());
+            sessions.add(session);
         }
 
         return sessions;

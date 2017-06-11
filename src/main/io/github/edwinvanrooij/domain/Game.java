@@ -32,7 +32,7 @@ public class Game {
 
     private static AtomicInteger nextId = new AtomicInteger();
 
-    private HashMap<Player, Bid> bids;
+    private HashMap<Integer, Bid> bids;
     private String id;
     private List<Player> players;
 
@@ -82,7 +82,7 @@ public class Game {
     }
 
     public void newBid(Player player, Bid bid) {
-        bids.put(player, bid);
+        bids.put(player.getId(), bid);
     }
 
     private String funName(String string) {
@@ -241,6 +241,19 @@ public class Game {
 
     public GameState generateGameState() {
         return new GameState(sideCardList, camelList, deck, lastPickedCard, winner, gameEnded);
+    }
+    public GameResults generateGameResults() {
+        GameResults results = new GameResults(winner.getCardType());
+        System.out.println("Generating game results for winner " + winner.getCardType().toString());
+
+        for (Player player : players) {
+            ResultItem item = new ResultItem(player, bids.get(player.getId()));
+            results.addResultItem(item);
+        }
+
+        System.out.println(String.format("There's %s players in this game, game id %s, map now contains", players.size(), id ));
+
+        return results;
     }
 
     private Card takeRandomCardFromDeck(List<Card> deck) {
