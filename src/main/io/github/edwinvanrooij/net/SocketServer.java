@@ -138,7 +138,7 @@ public class SocketServer implements Runnable {
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
 
                     while (!currentGameState.isGameEnded()) {
-                        Thread.sleep(20);
+                        Thread.sleep(2000);
                         game.nextRound();
                         currentGameState = game.generateGameState();
                         sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
