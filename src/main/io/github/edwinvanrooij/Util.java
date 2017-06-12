@@ -46,6 +46,11 @@ public class Util {
                         gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), GameStart.class)
                 );
                 break;
+            case Event.KEY_GAME_RESTART:
+                event.setValue(
+                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), GameRestart.class)
+                );
+                break;
             // endregion
 
             // region Client side

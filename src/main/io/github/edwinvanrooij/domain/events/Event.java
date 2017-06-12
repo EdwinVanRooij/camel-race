@@ -28,6 +28,8 @@ public class Event {
 
     public static final String KEY_GAME_OVER_ALL_RESULTS = "gameOverAllResults";
     public static final String KEY_GAME_OVER_PERSONAL_RESULTS = "gameOverPersonalResults";
+
+    public static final String KEY_GAME_RESTART = "gameRestart";
     // endregion
 
     // Key of the event type

@@ -6,10 +6,7 @@ import io.github.edwinvanrooij.domain.GameManager;
 import io.github.edwinvanrooij.domain.Player;
 import io.github.edwinvanrooij.domain.engine.GameResults;
 import io.github.edwinvanrooij.domain.engine.GameState;
-import io.github.edwinvanrooij.domain.events.Event;
-import io.github.edwinvanrooij.domain.events.GameStart;
-import io.github.edwinvanrooij.domain.events.PlayerJoinRequest;
-import io.github.edwinvanrooij.domain.events.PlayerNewBid;
+import io.github.edwinvanrooij.domain.events.*;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -138,7 +135,7 @@ public class SocketServer implements Runnable {
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
 
                     while (!currentGameState.isGameEnded()) {
-                        Thread.sleep(2000);
+                        Thread.sleep(200);
                         game.nextRound();
                         currentGameState = game.generateGameState();
                         sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
@@ -150,6 +147,16 @@ public class SocketServer implements Runnable {
                     break;
                 }
 
+                case Event.KEY_GAME_RESTART: {
+                    GameRestart gameRestart = (GameRestart) event.getValue();
+                    Game game = gameManager.getGameById(gameRestart.getId());
+                    game.restart();
+
+                    for (Session sess : gameManager.getPlayerSessionsByGame(game)) {
+                        sendMessage(Event.KEY_PLAYER_JOINED, null, sess);
+                    }
+                    break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

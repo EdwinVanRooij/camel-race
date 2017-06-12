@@ -119,6 +119,17 @@ public class Game {
                 '}';
     }
 
+    public void restart() {
+        sideCardList.clear();
+        camelList.clear();
+        deck.clear();
+        lastPickedCard = null;
+        winner = null;
+        gameEnded = false;
+
+        init();
+    }
+
     private void init() {
         // Create and add camels to list
         Camel clubsCamel = new Camel(CardType.CLUBS, 0);
