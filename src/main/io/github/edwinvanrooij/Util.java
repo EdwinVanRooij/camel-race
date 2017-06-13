@@ -11,6 +11,8 @@ import io.github.edwinvanrooij.camelraceshared.events.*;
  */
 public class Util {
 
+    public static final int MAX_IDLE_TIMEOUT = 30; // in minutes
+
     private static Gson gson = new Gson();
     private static JsonParser parser = new JsonParser();
 

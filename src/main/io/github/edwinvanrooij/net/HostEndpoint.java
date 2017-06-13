@@ -4,6 +4,8 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
+import static io.github.edwinvanrooij.Util.MAX_IDLE_TIMEOUT;
+
 /**
  * Created by eddy
  * on 6/5/17.
@@ -15,6 +17,7 @@ public class HostEndpoint {
     @OnOpen
     public void open(Session session) throws IOException {
         print("open");
+        session.setMaxIdleTimeout(MAX_IDLE_TIMEOUT * 60 * 1000); // * 1000 = seconds, * 60 = minutes
     }
 
     @OnClose
