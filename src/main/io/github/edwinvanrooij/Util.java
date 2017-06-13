@@ -3,7 +3,7 @@ package io.github.edwinvanrooij;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.domain.events.*;
+import io.github.edwinvanrooij.camelraceshared.events.*;
 
 /**
  * Created by eddy

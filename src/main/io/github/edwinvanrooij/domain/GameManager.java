@@ -1,7 +1,9 @@
 package io.github.edwinvanrooij.domain;
 
-import io.github.edwinvanrooij.domain.engine.Camel;
-import io.github.edwinvanrooij.domain.engine.GameResults;
+
+import io.github.edwinvanrooij.camelraceshared.domain.Bid;
+import io.github.edwinvanrooij.camelraceshared.domain.Game;
+import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 import javax.websocket.Session;
 import java.util.*;

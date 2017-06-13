@@ -1,6 +1,9 @@
 package io.github.edwinvanrooij.domain.engine;
 
-import io.github.edwinvanrooij.domain.Game;
+import io.github.edwinvanrooij.camelraceshared.domain.Camel;
+import io.github.edwinvanrooij.camelraceshared.domain.Game;
+import io.github.edwinvanrooij.camelraceshared.domain.GameState;
+import io.github.edwinvanrooij.camelraceshared.domain.SideCard;
 
 /**
  * Created by eddy

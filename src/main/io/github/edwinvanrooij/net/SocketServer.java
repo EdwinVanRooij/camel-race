@@ -1,12 +1,12 @@
 package io.github.edwinvanrooij.net;
 
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.domain.Game;
+import io.github.edwinvanrooij.camelraceshared.domain.Game;
+import io.github.edwinvanrooij.camelraceshared.domain.GameResults;
+import io.github.edwinvanrooij.camelraceshared.domain.GameState;
+import io.github.edwinvanrooij.camelraceshared.domain.Player;
+import io.github.edwinvanrooij.camelraceshared.events.*;
 import io.github.edwinvanrooij.domain.GameManager;
-import io.github.edwinvanrooij.domain.Player;
-import io.github.edwinvanrooij.domain.engine.GameResults;
-import io.github.edwinvanrooij.domain.engine.GameState;
-import io.github.edwinvanrooij.domain.events.*;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -30,6 +30,9 @@ import java.util.*;
  */
 public class SocketServer implements Runnable {
 
+    private static final int INTERVAL = 200;
+    private static final int PORT = 8082;
+
     private static SocketServer ourInstance = new SocketServer();
 
     public static SocketServer getInstance() {
@@ -45,8 +48,7 @@ public class SocketServer implements Runnable {
     @Override
     public void run() {
         try {
-
-            Server server = new Server(8082);
+            Server server = new Server(PORT);
 
             // Setup the context for servlets
             ServletContextHandler context = new ServletContextHandler();
@@ -135,7 +137,7 @@ public class SocketServer implements Runnable {
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
 
                     while (!currentGameState.isGameEnded()) {
-                        Thread.sleep(200);
+                        Thread.sleep(INTERVAL);
                         game.nextRound();
                         currentGameState = game.generateGameState();
                         sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);

@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/camelrace.iml" filepath="$PROJECT_DIR$/.idea/modules/camelrace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/camelrace_main.iml" filepath="$PROJECT_DIR$/.idea/modules/camelrace_main.iml" group="camelrace" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/camelrace_test.iml" filepath="$PROJECT_DIR$/.idea/modules/camelrace_test.iml" group="camelrace" />
     </modules>
   </component>
 </project>

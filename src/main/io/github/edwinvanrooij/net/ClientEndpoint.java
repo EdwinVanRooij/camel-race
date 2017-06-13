@@ -1,7 +1,5 @@
 package io.github.edwinvanrooij.net;
 
-import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.domain.events.Event;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
