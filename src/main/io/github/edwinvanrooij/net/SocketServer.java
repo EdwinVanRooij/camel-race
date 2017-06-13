@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class SocketServer implements Runnable {
 
-    private static final int INTERVAL = 200;
+    private static final int INTERVAL = 2000;
     private static final int PORT = 8082;
 
     private static SocketServer ourInstance = new SocketServer();

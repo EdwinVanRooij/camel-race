@@ -52,6 +52,17 @@ public class Util {
                 );
                 break;
 
+            case Event.KEY_PLAYER_JOINED:
+                // N/A
+                break;
+            case Event.KEY_GAME_STARTED:
+                // N/A
+                break;
+            case Event.KEY_GAME_OVER_PERSONAL_RESULTS:
+                event.setValue(
+                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PersonalResults.class)
+                );
+                break;
             default:
                 throw new Exception(String.format("No suitable event found for:\r\nType '%s'\r\nWhole json: '%s'", type, wholeJson.toString()));
         }
