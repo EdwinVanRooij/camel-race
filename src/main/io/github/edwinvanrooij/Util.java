@@ -27,7 +27,7 @@ public class Util {
 
         Event event = new Event(type);
         switch (type) {
-            // region Server side
+
             case Event.KEY_GAME_CREATE:
                 // N/A
                 break;
@@ -51,21 +51,7 @@ public class Util {
                         gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), GameRestart.class)
                 );
                 break;
-            // endregion
 
-            // region Client side
-            case Event.KEY_PLAYER_JOINED:
-                // N/A
-                break;
-            case Event.KEY_GAME_STARTED:
-                // N/A
-                break;
-            case Event.KEY_GAME_OVER_PERSONAL_RESULTS:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PersonalResults.class)
-                );
-                break;
-            // endregion
             default:
                 throw new Exception(String.format("No suitable event found for:\r\nType '%s'\r\nWhole json: '%s'", type, wholeJson.toString()));
         }
