@@ -28,8 +28,8 @@ public class Util {
         System.out.println(String.format("Type: %s", type));
 
         Event event = new Event(type);
-        switch (type) {
 
+        switch (type) {
             case Event.KEY_GAME_CREATE:
                 // N/A
                 break;
@@ -45,24 +45,22 @@ public class Util {
                 break;
             case Event.KEY_GAME_START:
                 event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), GameStart.class)
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
                 );
                 break;
             case Event.KEY_GAME_RESTART:
                 event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), GameRestart.class)
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
                 );
                 break;
-
-            case Event.KEY_PLAYER_JOINED:
-                // N/A
-                break;
-            case Event.KEY_GAME_STARTED:
-                // N/A
-                break;
-            case Event.KEY_GAME_OVER_PERSONAL_RESULTS:
+            case Event.KEY_NEW_ROUND:
                 event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PersonalResults.class)
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
+            case Event.KEY_GET_ALL_RESULTS:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
                 );
                 break;
             default:

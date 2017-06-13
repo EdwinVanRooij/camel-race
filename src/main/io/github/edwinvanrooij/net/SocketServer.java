@@ -128,30 +128,50 @@ public class SocketServer implements Runnable {
                 }
 
                 case Event.KEY_GAME_START: {
-                    GameStart gameStart = (GameStart) event.getValue();
-                    Game game = gameManager.getGameById(gameStart.getId());
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
                     GameState currentGameState = game.generateGameState();
                     sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
 
                     List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
+//
+//                    while (!currentGameState.isGameEnded()) {
+//                        Thread.sleep(INTERVAL);
+//                        game.nextRound();
+//                        currentGameState = game.generateGameState();
+//                        sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
+//                    }
+//
+//                    GameResults gameResults = game.generateGameResults();
+//                    System.out.println("Results before going in send message: " + gameResults.toString());
+//                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, gameResults, session);
+                    break;
+                }
 
-                    while (!currentGameState.isGameEnded()) {
-                        Thread.sleep(INTERVAL);
-                        game.nextRound();
-                        currentGameState = game.generateGameState();
-                        sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
-                    }
+                case Event.KEY_NEW_ROUND: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
+                    game.nextRound();
+
+                    RoundResults results = game.generateRoundResults();
+                    sendMessage(Event.KEY_ROUND_RESULTS, results, session);
+                    break;
+                }
+
+                case Event.KEY_ALL_RESULTS: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
+                    game.nextRound();
 
                     GameResults gameResults = game.generateGameResults();
-                    System.out.println("Results before going in send message: " + gameResults.toString());
-                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, gameResults, session);
+                    sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);
                     break;
                 }
 
                 case Event.KEY_GAME_RESTART: {
-                    GameRestart gameRestart = (GameRestart) event.getValue();
-                    Game game = gameManager.getGameById(gameRestart.getId());
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
                     game.restart();
 
                     for (Session sess : gameManager.getPlayerSessionsByGame(game)) {
