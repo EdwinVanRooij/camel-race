@@ -1,10 +1,7 @@
 package io.github.edwinvanrooij.net;
 
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.camelraceshared.domain.Game;
-import io.github.edwinvanrooij.camelraceshared.domain.GameResults;
-import io.github.edwinvanrooij.camelraceshared.domain.GameState;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
+import io.github.edwinvanrooij.camelraceshared.domain.*;
 import io.github.edwinvanrooij.camelraceshared.events.*;
 import io.github.edwinvanrooij.domain.GameManager;
 import org.eclipse.jetty.server.Handler;
@@ -30,7 +27,6 @@ import java.util.*;
  */
 public class SocketServer implements Runnable {
 
-    private static final int INTERVAL = 2000;
     private static final int PORT = 8082;
 
     private static SocketServer ourInstance = new SocketServer();
@@ -149,20 +145,62 @@ public class SocketServer implements Runnable {
                     break;
                 }
 
-                case Event.KEY_NEW_ROUND: {
+                case Event.KEY_PICK_CARD: {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
-                    game.nextRound();
+                    Card card = game.pickCard();
 
-                    RoundResults results = game.generateRoundResults();
-                    sendMessage(Event.KEY_ROUND_RESULTS, results, session);
+                    sendMessage(Event.KEY_PICKED_CARD, card, session);
                     break;
                 }
 
-                case Event.KEY_ALL_RESULTS: {
+                case Event.KEY_CAMEL_WON: {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
-                    game.nextRound();
+                    Boolean didCamelWinYet = game.didCamelWinYet();
+
+                    if (didCamelWinYet) {
+                        sendMessage(Event.KEY_CAMEL_DID_WIN, game.getWinningCamel(), session);
+                    } else {
+                        sendMessage(Event.KEY_CAMEL_DID_NOT_WIN, "", session);
+                    }
+                    break;
+                }
+
+                case Event.KEY_MOVE_CARDS_BY_LATEST: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
+                    game.moveCamelAccordingToLastCard();
+                    List<Camel> newCamelPositions = game.getCamelList();
+
+                    sendMessage(Event.KEY_NEW_CAMEL_POSITIONS, newCamelPositions, session);
+                    break;
+                }
+
+                case Event.KEY_SHOULD_SIDE_CARD_TURN: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
+                    boolean shouldItTurn = game.shouldTurnSideCard();
+
+                    if (shouldItTurn) {
+                        sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_YES, game.getSideCardList(), session);
+                    } else {
+                        sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_NO, "", session);
+                    }
+                    break;
+                }
+
+                case Event.KEY_NEW_CAMEL_LIST: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
+
+                    sendMessage(Event.KEY_NEW_CAMEL_LIST, game.getCamelList(), session);
+                    break;
+                }
+
+                case Event.KEY_GET_ALL_RESULTS: {
+                    String gameId = (String) event.getValue();
+                    Game game = gameManager.getGameById(gameId);
 
                     GameResults gameResults = game.generateGameResults();
                     sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);

@@ -63,6 +63,31 @@ public class Util {
                         wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
                 );
                 break;
+            case Event.KEY_PICK_CARD:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
+            case Event.KEY_CAMEL_WON:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
+            case Event.KEY_SHOULD_SIDE_CARD_TURN:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
+            case Event.KEY_MOVE_CARDS_BY_LATEST:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
+            case Event.KEY_NEW_CAMEL_LIST:
+                event.setValue(
+                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
+                );
+                break;
             default:
                 throw new Exception(String.format("No suitable event found for:\r\nType '%s'\r\nWhole json: '%s'", type, wholeJson.toString()));
         }

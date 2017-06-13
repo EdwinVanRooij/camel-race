@@ -18,7 +18,7 @@ public class ClientEmulator implements Runnable {
 
         try {
             for (int i = 0; i < 100; i++) {
-                engine.nextRound();
+//                engine.nextRound();
                 printNewRound(i);
                 GameState gameState = engine.generateGameState();
                 if (gameState.isGameEnded()) {
