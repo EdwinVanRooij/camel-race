@@ -157,10 +157,10 @@ public class SocketServer implements Runnable {
                 case Event.KEY_CAMEL_WON: {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
-                    Boolean didCamelWinYet = game.didCamelWinYet();
+                    Camel camel = game.didCamelWinYet();
 
-                    if (didCamelWinYet) {
-                        sendMessage(Event.KEY_CAMEL_DID_WIN, game.getWinningCamel(), session);
+                    if (camel != null) {
+                        sendMessage(Event.KEY_CAMEL_DID_WIN, camel, session);
                     } else {
                         sendMessage(Event.KEY_CAMEL_DID_NOT_WIN, "", session);
                     }
@@ -194,7 +194,7 @@ public class SocketServer implements Runnable {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
 
-                    sendMessage(Event.KEY_NEW_CAMEL_LIST, game.getCamelList(), session);
+                    sendMessage(Event.KEY_NEW_CAMEL_LIST, game.newCamelList(), session);
                     break;
                 }
 

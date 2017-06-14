@@ -1,6 +1,5 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
-import io.github.edwinvanrooij.camelraceshared.events.RoundResults;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Game {
 
+    // region Funmap
     private static transient Map<String, String> funMap = new HashMap<>();
 
     static {
@@ -25,70 +25,49 @@ public class Game {
         funMap.put("dennis", "Ja doe mij maar skere wodka");
     }
 
-    private static AtomicInteger nextId = new AtomicInteger();
-
-    private HashMap<Integer, Bid> bids;
-    private String id;
-    private List<Player> players;
-
-    private List<SideCard> sideCardList;
-    private List<Camel> camelList;
-    private List<Card> deck;
-
-    private boolean sideCardTurnedThisRound = false;
-    private SideCard sideCardToTurn = null;
-
-    private Card lastPickedCard;
-    private Camel winner;
-    private boolean gameEnded;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    public Game(String id) {
-        this.id = id;
-        players = new ArrayList<>();
-        bids = new HashMap<>();
-
-        sideCardList = new ArrayList<>();
-        camelList = new ArrayList<>();
-        deck = new ArrayList<>();
-        init();
-    }
-
-    public Game() {
-        players = new ArrayList<>();
-        bids = new HashMap<>();
-
-        sideCardList = new ArrayList<>();
-        camelList = new ArrayList<>();
-        deck = new ArrayList<>();
-        init();
-    }
-
-    public void newBid(Player player, Bid bid) {
-        bids.put(player.getId(), bid);
-    }
-
     private String funName(String string) {
         if (funMap.get(string) != null) {
             return funMap.get(string);
         }
         return string;
     }
+    // endregion
+
+    private static AtomicInteger nextId = new AtomicInteger();
+
+    private String id;
+    private HashMap<Integer, Bid> bids; // player ID with bids
+    private List<Player> players;
+
+    private List<SideCard> sideCardList;
+    private List<Camel> camelList;
+    private List<Card> deck;
+
+    private Card lastPickedCard;
+
+    private boolean gameEnded;
+    private Camel winner;
+
+    private SideCard sideCardToTurn = null;
+
+    public String getId() {
+        return id;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Game(String id) throws Exception {
+        this.id = id;
+        initVariables();
+        setInitialState();
+    }
+
+    public void newBid(Player player, Bid bid) {
+        bids.put(player.getId(), bid);
+    }
+
 
     public Player addPlayer(Player player) {
         int uniqueId = nextId.incrementAndGet();
@@ -108,29 +87,28 @@ public class Game {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "Game{" +
-                "bids=" + bids +
-                ", id='" + id + '\'' +
-                ", players=" + players +
-                '}';
-    }
-
-    public void restart() {
+    public void restart() throws Exception {
         sideCardList.clear();
         camelList.clear();
         deck.clear();
         lastPickedCard = null;
         winner = null;
         gameEnded = false;
-        sideCardTurnedThisRound = false;
         sideCardToTurn = null;
 
-        init();
+        setInitialState();
     }
 
-    private void init() {
+    private void initVariables() {
+        players = new ArrayList<>();
+        bids = new HashMap<>();
+
+        sideCardList = new ArrayList<>();
+        camelList = new ArrayList<>();
+        deck = new ArrayList<>();
+    }
+
+    private void addCamels() {
         // Create and add camels to list
         Camel clubsCamel = new Camel(CardType.CLUBS, 0);
         Camel diamondsCamel = new Camel(CardType.DIAMONDS, 1);
@@ -140,7 +118,9 @@ public class Game {
         camelList.add(diamondsCamel);
         camelList.add(heartsCamel);
         camelList.add(spadesCamel);
+    }
 
+    private void initDeck() {
         // Create and fill the remaining deck
         List<Card> clubsDeck = new ArrayList<>();
         List<Card> diamondsDeck = new ArrayList<>();
@@ -163,53 +143,61 @@ public class Game {
         deck.addAll(diamondsDeck);
         deck.addAll(heartsDeck);
         deck.addAll(spadesDeck);
+    }
 
+    private void initSideCards() throws Exception {
         // Take 4 random cards from the deck, fill in side cards
         for (int i = 1; i < 5; i++) {
-            Card randomCard = takeRandomCardFromDeck(deck);
+            Card randomCard = pickCard();
             SideCard card = new SideCard(randomCard.getCardType(), randomCard.getCardValue(), i);
             sideCardList.add(card);
         }
+        lastPickedCard = null;
+    }
+
+    private void setInitialState() throws Exception {
+        addCamels();
+        initDeck();
+        initSideCards();
     }
 
     public Card pickCard() throws Exception {
-        lastPickedCard = takeRandomCardFromDeck(deck);
-        return lastPickedCard;
+        int randomNumber = new Random().nextInt(deck.size());
 
-//        moveCamelsAccordingToCard(lastPickedCard, true);
+        // Get a non-empty card
+        lastPickedCard = null;
+        do {
+            lastPickedCard = deck.get(randomNumber);
+        } while (lastPickedCard == null);
+
+        deck.remove(lastPickedCard);
+
+        return lastPickedCard;
     }
 
-    public boolean didCamelWinYet() throws Exception {
+    public Camel didCamelWinYet() throws Exception {
         Camel camel = getCamelByCardType(lastPickedCard.getCardType());
         if (camel.getPosition() + 1 > sideCardList.size()) {
-            return true;
+            winner = camel;
+            gameEnded = true;
+            return camel;
         }
-        return false;
-    }
-
-    public Camel getWinningCamel() throws Exception {
-        winner = getCamelByCardType(lastPickedCard.getCardType());
-        gameEnded = true;
-        return getWinningCamel();
+        return null;
     }
 
     public void moveCamelAccordingToLastCard() throws Exception {
-        moveCamelAccordingToCard(lastPickedCard);
+        // Get the camel that matches this card
+        CardType cardType = lastPickedCard.getCardType();
+        Camel camel = getCamelByCardType(cardType);
+        moveCamel(camel, true);
     }
 
-    private void moveCamelAccordingToCard(Card card) throws Exception {
-        // Get the camel that matches this card
-        CardType cardType = card.getCardType();
-        Camel camel = getCamelByCardType(cardType);
-
-        // Get camel position
-        int position = camel.getPosition();
-
-        // Put camel one position according to forward or not
-        position++;
-
-        // Set a new position for this camel
-        camel.setPosition(position);
+    private void setCamelPosition(Camel camel) {
+        for (int i = 0; i < camelList.size(); i++) {
+            if (camelList.get(i).getCardType() == camel.getCardType()) {
+                camelList.set(i, camel);
+            }
+        }
     }
 
     public boolean shouldTurnSideCard() throws Exception {
@@ -229,14 +217,12 @@ public class Game {
                 for (Camel c : camelList) {
                     if (c.getPosition() < position) {
                         // There's a card below this position, don't turn around
-                        sideCardTurnedThisRound = false;
                         return false;
                     }
                 }
 
                 // All camels have passed this position or are on it, move card around
                 card.setVisible(true);
-                sideCardTurnedThisRound = true;
                 sideCardToTurn = card;
                 return true;
             }
@@ -245,16 +231,12 @@ public class Game {
     }
 
     public List<Camel> newCamelList() throws Exception {
-        moveCamelsAccordingToCard(sideCardToTurn, false);
-        return camelList;
-    }
-
-    private void moveCamelsAccordingToCard(Card card, boolean forward) throws Exception {
         // Get the camel that matches this card
-        CardType cardType = card.getCardType();
+        CardType cardType = sideCardToTurn.getCardType();
         Camel camel = getCamelByCardType(cardType);
 
-        moveCamel(camel, forward);
+        moveCamel(camel, false);
+        return camelList;
     }
 
     private void moveCamel(Camel camel, boolean forward) throws Exception {
@@ -278,41 +260,8 @@ public class Game {
         // Set a new position for this camel
         camel.setPosition(position);
 
-        handleSideCard(position);
-    }
-
-    private void handleSideCard(int position) throws Exception {
-
-        // Find card at this position
-        for (SideCard card : sideCardList) {
-            if (card.getPosition() == position) {
-
-                // Check if card was turned around yet
-                if (card.isVisible()) {
-                    // Card is visible, do nothing to it
-                    return;
-                }
-
-                // Card is invisible
-                for (Camel c : camelList) {
-                    if (c.getPosition() < position) {
-                        // There's a card below this position, don't turn around
-                        sideCardTurnedThisRound = false;
-                        return;
-                    }
-                }
-
-                // All camels have passed this position or are on it, move card around
-                card.setVisible(true);
-
-                sideCardTurnedThisRound = true;
-                sideCardToTurn = card;
-                moveCamelsAccordingToCard(card, false);
-
-                // Don't iterate over other positions
-                return;
-            }
-        }
+        // Update real camelList
+        setCamelPosition(camel);
     }
 
     private Camel getCamelByCardType(CardType type) throws Exception {
@@ -328,34 +277,6 @@ public class Game {
         return new GameState(sideCardList, camelList, deck, lastPickedCard, winner, gameEnded);
     }
 
-    private List<Camel> getAllForwardCamels() {
-        if (!sideCardTurnedThisRound) {
-            System.out.println("No side card turned this round");
-            return camelList;
-        }
-
-        List<Camel> result = new ArrayList<>();
-        CardType turnedType = sideCardToTurn.getCardType();
-        System.out.println(String.format("Turned type %s this round", turnedType));
-
-        for (Camel c : camelList) {
-            if (c.getCardType() == turnedType) {
-                if (lastPickedCard.getCardType() == turnedType) {
-                    result.add(new Camel(c.getCardType(), c.getRow(), c.getPosition()));
-                } else {
-                    result.add(new Camel(c.getCardType(), c.getRow(), c.getPosition() + 1));
-                }
-            } else {
-                result.add(c);
-            }
-        }
-        return result;
-    }
-
-    public RoundResults generateRoundResults() throws Exception {
-        return new RoundResults(lastPickedCard, gameEnded, winner, getAllForwardCamels(), camelList, sideCardTurnedThisRound, sideCardList);
-    }
-
     public GameResults generateGameResults() {
         GameResults results = new GameResults(winner.getCardType());
         System.out.println("Generating game results for winner " + winner.getCardType().toString());
@@ -368,19 +289,6 @@ public class Game {
         System.out.println(String.format("There's %s players in this game, game id %s, map now contains", players.size(), id));
 
         return results;
-    }
-
-    private Card takeRandomCardFromDeck(List<Card> deck) {
-        int randomNumber = new Random().nextInt(deck.size());
-
-        // Get a non-empty card
-        Card pickedOutCard;
-        do {
-            pickedOutCard = deck.get(randomNumber);
-        } while (pickedOutCard == null);
-
-        deck.remove(pickedOutCard);
-        return pickedOutCard;
     }
 
     public List<SideCard> getSideCardList() {

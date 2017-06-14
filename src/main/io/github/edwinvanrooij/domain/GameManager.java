@@ -23,7 +23,7 @@ public class GameManager {
         playerSessionMap = new HashMap<>();
     }
 
-    public Game createGame(Session session) {
+    public Game createGame(Session session) throws Exception {
         String id = generateUniqueId();
         Game game = new Game(id);
         games.add(game);
