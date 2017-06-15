@@ -204,6 +204,9 @@ public class SocketServer implements Runnable {
 
                     GameResults gameResults = game.generateGameResults();
                     sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);
+
+                    List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
+                    sendMessages(Event.KEY_GAME_OVER_PERSONAL_RESULTS, "", playerSessions);
                     break;
                 }
 
