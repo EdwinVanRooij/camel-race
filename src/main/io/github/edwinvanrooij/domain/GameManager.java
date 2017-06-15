@@ -60,7 +60,7 @@ public class GameManager {
     }
 
     public Session getSessionByGameId(String id) {
-        return gameSessionMap.get(id);
+        return gameSessionMap.get(id.toLowerCase());
     }
 
     public Session getSessionByPlayerId(int id) {
@@ -69,7 +69,7 @@ public class GameManager {
 
     public Game getGameById(String id) {
         for (Game game : games) {
-            if (Objects.equals(game.getId(), id)) {
+            if (Objects.equals(game.getId().toLowerCase(), id.toLowerCase())) {
                 System.out.println(String.format("getGameById returns %s", game));
                 return game;
             }

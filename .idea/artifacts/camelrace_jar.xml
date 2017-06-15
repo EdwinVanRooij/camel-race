@@ -1,0 +1,37 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="camelrace:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/camelrace_jar</output-path>
+    <root id="archive" name="camelrace.jar">
+      <element id="module-output" name="camelrace" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-client/9.4.5.v20170502/ca35c26110afd73d4cc164682bd0d4b0c1e057cb/jetty-client-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/9.4.5.v20170502/b8c82f1be608efac5dfe3448e51701a59a7e3f21/jetty-webapp-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-annotations/9.4.5.v20170502/3314471ec06e8edae9a9eef72b41c9e7adc61d35/jetty-annotations-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/9.4.5.v20170502/4f4fc4cbe3504b6c91143ee37b38a1f3de2dcc72/jetty-security-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/javax-websocket-client-impl/9.4.5.v20170502/55efc1fcfc9818c921b9fd58f2976f16b3594391/javax-websocket-client-impl-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/9.4.5.v20170502/b4d30340213c3d2a5f908860ba170c5a697829be/jetty-server-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-plus/9.4.5.v20170502/4a940f6876761c3a1953b209fb58a046b1c2158d/jetty-plus-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/5.1/5ef31c4fe953b1fd00b8a88fa1d6820e8785bb45/asm-5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-client/9.4.5.v20170502/5c7de9bd7d448de674267a58e91d804c65f7105a/websocket-client-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.2/479c1e06db31c432330183f5cae684163f186146/javax.annotation-api-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.1/2a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0/gson-2.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.websocket/javax.websocket-api/1.1/eeeb68631711256418dfbb47b11c731b6c8f6235/javax.websocket-api-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/9.4.5.v20170502/96c62b93c82682edb1c83ea2f912d7f406080557/jetty-xml-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/9.4.5.v20170502/5fd36dfcf39110b809bd9b20cec62706ab694711/jetty-util-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/9.4.5.v20170502/394a535b76ca7399b25be3266f06f614e020517e/jetty-servlet-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/5.1/87b38c12a0ea645791ead9d3e74ae5268d1d6c34/asm-tree-5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-server/9.4.5.v20170502/43a51af9063879fc6f479990ffec3059183bddf5/websocket-server-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/5.1/25d8a575034dd9cfcb375a39b5334f0ba9c8474e/asm-commons-5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../camel-race-shared/out/artifacts/camel_race_shared_jar/camel-race-shared.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/9.4.5.v20170502/c51b8a6a67d64672889249dd958edd77bff8fc0c/jetty-http-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-jndi/9.4.5.v20170502/52236b1c82002c2b50239af4eb25eeb27afcb0dc/jetty-jndi-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-continuation/9.4.5.v20170502/cfec8a7dc2e4c28d73407059a0ef1d35eef5325/jetty-continuation-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-api/9.4.5.v20170502/521348a576e0d70f4abb7813fa1743919ec0921a/websocket-api-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/9.4.5.v20170502/76086f955d4e943396b8f340fd5bae3ce4da19d9/jetty-io-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/javax-websocket-server-impl/9.4.5.v20170502/742fd39cf8bb5189142b79ec535d0ac2d7783f09/javax-websocket-server-impl-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlets/9.4.5.v20170502/b2dfc9eb4e7d88c70001a15011e5011d0446e64e/jetty-servlets-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-common/9.4.5.v20170502/2a385e7b044a1832efa4cf98bc1ea326fa0804c2/websocket-common-9.4.5.v20170502.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/9.4.5.v20170502/f6445d583d0bd96ee0896cacd51c6e25a77e3bf8/websocket-servlet-9.4.5.v20170502.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
