@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class SocketServer implements Runnable {
 
-    private static final int PORT = 8082;
+    private static final int PORT = 8085;
 
     private static SocketServer ourInstance = new SocketServer();
 
