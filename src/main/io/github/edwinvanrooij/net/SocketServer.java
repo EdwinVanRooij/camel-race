@@ -38,7 +38,6 @@ public class SocketServer implements Runnable {
     private SocketServer() {
     }
 
-
     private GameManager gameManager = new GameManager();
 
     @Override
@@ -108,7 +107,6 @@ public class SocketServer implements Runnable {
                     sendMessage(Event.KEY_PLAYER_JOINED, player, session);
 
                     Game game = gameManager.getGameById(gameId);
-                    System.out.println(String.format("Got this game: %s", game.toString()));
                     sendMessage(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
                     break;
                 }
@@ -120,6 +118,31 @@ public class SocketServer implements Runnable {
 
                     Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
                     sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
+                    break;
+                }
+
+                case Event.KEY_PLAYER_READY: {
+                    PlayerNewBid playerNewBid = (PlayerNewBid) event.getValue();
+                    Boolean result = gameManager.playerNewBidAndReady(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
+                    sendMessage(Event.KEY_PLAYER_READY_SUCCESS, result, session);
+
+                    Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
+                    sendMessage(Event.KEY_PLAYER_READY, playerNewBid, gameSession);
+
+                    if (gameManager.isEveryoneReady(playerNewBid.getGameId())) {
+                        System.out.println("Everyone is ready");
+                        sendMessage(Event.KEY_GAME_READY, "", gameSession);
+                    }
+                    break;
+                }
+
+                case Event.KEY_PLAYER_NOT_READY: {
+                    PlayerNotReady playerNotReady = (PlayerNotReady) event.getValue();
+                    Boolean result = gameManager.playerNotReady(playerNotReady.getGameId(), playerNotReady.getPlayer());
+                    sendMessage(Event.KEY_PLAYER_NOT_READY_SUCCESS, result, session);
+
+                    Session gameSession = gameManager.getSessionByGameId(playerNotReady.getGameId());
+                    sendMessage(Event.KEY_PLAYER_NOT_READY, playerNotReady, gameSession);
                     break;
                 }
 
@@ -228,7 +251,6 @@ public class SocketServer implements Runnable {
 
     private void sendMessage(String eventType, Object value, Session session) {
         try {
-            System.out.println(String.format("About to send '%s' with object '%s'", eventType, value));
             Event event = new Event(eventType, value);
             String message = Util.objectToJson(event);
             System.out.println(String.format("Sending: %s", message));
@@ -239,7 +261,6 @@ public class SocketServer implements Runnable {
     }
 
     private void sendMessages(String eventType, Object value, List<Session> sessionList) {
-        System.out.println(String.format("About to send messages '%s' with object '%s'", eventType, value));
         Event event = new Event(eventType, value);
         String message = Util.objectToJson(event);
         System.out.println(String.format("Sending messages: %s", message));
@@ -247,7 +268,6 @@ public class SocketServer implements Runnable {
         for (Session session : sessionList) {
             try {
                 session.getBasicRemote().sendText(message);
-                System.out.println(String.format("Successfully sent message to %s", session.getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {

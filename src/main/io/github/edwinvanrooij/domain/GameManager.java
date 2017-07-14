@@ -28,7 +28,6 @@ public class GameManager {
         Game game = new Game(id);
         games.add(game);
         gameSessionMap.put(game.getId(), session);
-        System.out.println(String.format("Created game: %s (in createGame in manager)", game));
         return game;
     }
 
@@ -67,10 +66,14 @@ public class GameManager {
         return playerSessionMap.get(id);
     }
 
+    public boolean isEveryoneReady(String gameId) {
+        Game game = getGameById(gameId);
+        return game.everyoneIsReady();
+    }
+
     public Game getGameById(String id) {
         for (Game game : games) {
             if (Objects.equals(game.getId().toLowerCase(), id.toLowerCase())) {
-                System.out.println(String.format("getGameById returns %s", game));
                 return game;
             }
         }
@@ -94,6 +97,40 @@ public class GameManager {
         return playerWithId;
     }
 
+    public boolean playerNotReady(String gameId, Player player) {
+        Game game = getGameById(gameId);
+
+        if (game == null) {
+            return false;
+        }
+
+        Player playerWithAttributes = game.getPlayer(player.getId());
+
+        if (playerWithAttributes == null) {
+            return false;
+        }
+
+        game.ready(player, false);
+        return true;
+    }
+
+    public boolean playerNewBidAndReady(String gameId, Player player, Bid bid) {
+        Game game = getGameById(gameId);
+
+        if (game == null) {
+            return false;
+        }
+
+        Player playerWithAttributes = game.getPlayer(player.getId());
+
+        if (playerWithAttributes == null) {
+            return false;
+        }
+
+        game.newBid(player, bid);
+        game.ready(player, true);
+        return true;
+    }
 
     public boolean playerNewBid(String gameId, Player player, Bid bid) {
         Game game = getGameById(gameId);
@@ -116,7 +153,6 @@ public class GameManager {
         List<Session> sessions = new ArrayList<>();
 
         for (Player player : game.getPlayers()) {
-            System.out.println(String.format("player %s in get playersessionsbygame", player));
             Session session = getSessionByPlayerId(player.getId());
             sessions.add(session);
         }
