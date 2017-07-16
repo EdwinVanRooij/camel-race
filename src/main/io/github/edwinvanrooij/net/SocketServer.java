@@ -146,6 +146,14 @@ public class SocketServer implements Runnable {
                     break;
                 }
 
+                case Event.KEY_PLAYER_ALIVE_CHECK: {
+                    PlayerAliveCheck playerAliveCheck = (PlayerAliveCheck) event.getValue();
+                    gameManager.playerAliveCheck(playerAliveCheck);
+
+                    sendMessage(Event.KEY_PLAYER_ALIVE_CHECK_CONFIRMED, true, session);
+                    break;
+                }
+
                 case Event.KEY_GAME_START: {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
@@ -154,7 +162,7 @@ public class SocketServer implements Runnable {
 
                     List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
                     sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
-//
+
 //                    while (!currentGameState.isGameEnded()) {
 //                        Thread.sleep(INTERVAL);
 //                        game.nextRound();

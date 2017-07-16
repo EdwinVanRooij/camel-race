@@ -4,6 +4,7 @@ package io.github.edwinvanrooij.domain;
 import io.github.edwinvanrooij.camelraceshared.domain.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
+import io.github.edwinvanrooij.camelraceshared.events.PlayerAliveCheck;
 
 import javax.websocket.Session;
 import java.util.*;
@@ -95,6 +96,12 @@ public class GameManager {
         Player playerWithId = game.addPlayer(player);
         playerSessionMap.put(playerWithId.getId(), session);
         return playerWithId;
+    }
+
+    public void playerAliveCheck(PlayerAliveCheck playerAliveCheck) {
+        Game game = getGameById(playerAliveCheck.getGameId());
+        Player player = game.getPlayer(playerAliveCheck.getPlayer().getId());
+        game.playerAliveCheck(player);
     }
 
     public boolean playerNotReady(String gameId, Player player) {

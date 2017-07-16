@@ -3,6 +3,7 @@ package io.github.edwinvanrooij;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.edwinvanrooij.camelraceshared.domain.Player;
 import io.github.edwinvanrooij.camelraceshared.events.*;
 
 /**
@@ -56,6 +57,11 @@ public class Util {
             case Event.KEY_PLAY_AGAIN:
                 event.setValue(
                         gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayAgainRequest.class)
+                );
+                break;
+            case Event.KEY_PLAYER_ALIVE_CHECK:
+                event.setValue(
+                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerAliveCheck.class)
                 );
                 break;
             case Event.KEY_GAME_START:
