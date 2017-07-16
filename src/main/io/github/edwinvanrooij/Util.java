@@ -53,6 +53,11 @@ public class Util {
                         gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerNotReady.class)
                 );
                 break;
+            case Event.KEY_PLAY_AGAIN:
+                event.setValue(
+                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayAgainRequest.class)
+                );
+                break;
             case Event.KEY_GAME_START:
                 event.setValue(
                         wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()

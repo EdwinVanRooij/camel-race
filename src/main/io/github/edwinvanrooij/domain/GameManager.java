@@ -159,4 +159,15 @@ public class GameManager {
 
         return sessions;
     }
+
+    public Map<Player, Session> getPlayerSessionMapByGame(Game game) {
+        Map<Player, Session> playerSessionMap = new HashMap<>();
+
+        for (Player player : game.getPlayers()) {
+            Session session = getSessionByPlayerId(player.getId());
+            playerSessionMap.put(player, session);
+        }
+
+        return playerSessionMap;
+    }
 }

@@ -236,10 +236,26 @@ public class SocketServer implements Runnable {
                 case Event.KEY_GAME_RESTART: {
                     String gameId = (String) event.getValue();
                     Game game = gameManager.getGameById(gameId);
-                    game.restart();
+                    restartGame(game);
+                    break;
+                }
 
-                    for (Session sess : gameManager.getPlayerSessionsByGame(game)) {
-                        sendMessage(Event.KEY_PLAYER_JOINED, null, sess);
+                case Event.KEY_PLAY_AGAIN: {
+                    PlayAgainRequest playAgainRequest = (PlayAgainRequest) event.getValue();
+
+                    String gameId = playAgainRequest.getGameId();
+                    Game game = gameManager.getGameById(gameId);
+
+                    game.playAgain(playAgainRequest.getPlayer().getId(), true);
+                    System.out.println(String.format("Player %s wants to play again!", playAgainRequest.getPlayer().getName()));
+
+                    sendMessage(Event.KEY_PLAY_AGAIN_SUCCESSFUL, true, session);
+
+                    if (game.allPlayAgain()) {
+                        System.out.println("Everyone wants to play again!");
+                        restartGame(game);
+                    } else {
+                        System.out.println("Not everyone wants to play again");
                     }
                     break;
                 }
@@ -249,11 +265,34 @@ public class SocketServer implements Runnable {
         }
     }
 
+    private void restartGame(Game game) throws Exception {
+        System.out.println("Restarting game");
+
+        Session gameSession = gameManager.getSessionByGameId(game.getId());
+        sendMessage(Event.KEY_GAME_RESTART, "", gameSession);
+
+        game.restart();
+
+        for (Player player : game.getPlayers()) {
+            sendMessage(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
+
+            Bid bid = game.getBid(player.getId());
+            if (bid == null) {
+                throw new Exception("Bid is null! This is not allowed when restarting a game.");
+            }
+            PlayerNewBid playerBid = new PlayerNewBid(game.getId(), player, bid);
+            sendMessage(Event.KEY_PLAYER_NEW_BID, playerBid, gameManager.getSessionByGameId(game.getId()));
+        }
+        for (Map.Entry<Player, Session> entry : gameManager.getPlayerSessionMapByGame(game).entrySet()) {
+            sendMessage(Event.KEY_PLAYER_JOINED, entry.getKey(), entry.getValue());
+        }
+    }
+
     private void sendMessage(String eventType, Object value, Session session) {
         try {
             Event event = new Event(eventType, value);
             String message = Util.objectToJson(event);
-            System.out.println(String.format("Sending: %s", message));
+            System.out.println(String.format("Sending: %s  ---- to session %s", message, session.getId()));
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             e.printStackTrace();
