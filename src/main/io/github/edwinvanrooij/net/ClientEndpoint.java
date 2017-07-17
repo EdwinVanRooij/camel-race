@@ -29,17 +29,12 @@ public class ClientEndpoint {
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        print(message, "from handleMessage");
+        print(message);
         SocketServer.getInstance().handleMessage(message, session);
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private void print(String message, String extra) {
-        System.out.printf("ClientEndpoint (%s): %s\n", message, extra);
-    }
-
     private void print(String message) {
-        System.out.println("ClientEndpoint" + message);
+        System.out.println("Received: " + message);
     }
 }
 //        Game game = SocketServer.getInstance().createGame();

@@ -83,6 +83,7 @@ public class SocketServer implements Runnable {
 
             server.start();
             server.join();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,6 +129,7 @@ public class SocketServer implements Runnable {
 
                     Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
                     sendMessage(Event.KEY_PLAYER_READY, playerNewBid, gameSession);
+
 
                     if (gameManager.isEveryoneReady(playerNewBid.getGameId())) {
                         System.out.println("Everyone is ready");
@@ -236,8 +238,13 @@ public class SocketServer implements Runnable {
                     GameResults gameResults = game.generateGameResults();
                     sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);
 
-                    List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
-                    sendMessages(Event.KEY_GAME_OVER_PERSONAL_RESULTS, "", playerSessions);
+                    for (Player player : game.getPlayers()) {
+                        boolean won;
+                        Bid bid = game.getBid(player.getId());
+                        won = bid.getType() == game.getWinner().getCardType();
+                        PersonalResultItem item = new PersonalResultItem(bid, won);
+                        sendMessage(Event.KEY_GAME_OVER_PERSONAL_RESULTS, item, gameManager.getSessionByPlayerId(player.getId()));
+                    }
                     break;
                 }
 
@@ -300,7 +307,7 @@ public class SocketServer implements Runnable {
         try {
             Event event = new Event(eventType, value);
             String message = Util.objectToJson(event);
-            System.out.println(String.format("Sending: %s  ---- to session %s", message, session.getId()));
+            System.out.println(String.format("Sending: %s", message));
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             e.printStackTrace();

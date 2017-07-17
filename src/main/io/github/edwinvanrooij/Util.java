@@ -23,10 +23,8 @@ public class Util {
 
     public static Event jsonToEvent(String json) throws Exception {
         JsonObject wholeJson = parser.parse(json).getAsJsonObject();
-        System.out.println(String.format("Whole: %s", wholeJson.toString()));
 
         String type = wholeJson.get(Event.KEY_EVENT_TYPE).getAsString();
-        System.out.println(String.format("Type: %s", type));
 
         Event event = new Event(type);
 
