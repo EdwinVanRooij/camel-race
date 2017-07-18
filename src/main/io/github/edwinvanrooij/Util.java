@@ -1,115 +1,93 @@
 package io.github.edwinvanrooij;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.events.*;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
 
 /**
  * Created by eddy
- * on 6/5/17.
+ * on 7/18/17.
  */
 public class Util {
 
-    public static final int MAX_IDLE_TIMEOUT = 30; // in minutes
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+    private static SimpleDateFormat fileDateFormat = new SimpleDateFormat("yyyy_MM_dd");
 
-    private static Gson gson = new Gson();
-    private static JsonParser parser = new JsonParser();
+    private static Properties configProps;
+    private static boolean isProduction;
 
-    public static String objectToJson(Object obj) {
-        return gson.toJson(obj);
+    static {
+        try {
+            configProps = getConfigProperties();
+            isProduction = isProduction();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static Event jsonToEvent(String json) throws Exception {
-        JsonObject wholeJson = parser.parse(json).getAsJsonObject();
+    public static void log(String message) {
+        if (isProduction) {
 
-        String type = wholeJson.get(Event.KEY_EVENT_TYPE).getAsString();
+            String log = String.format("%s\t||\tInfo\t||\t%s\n", generateTimeStamp(), message);
+            try (FileWriter fw = new FileWriter(generateFileName(), true)){
+                fw.write(log);
+            } catch (IOException ioe) {
+                System.err.println("IOException: " + ioe.getMessage());
+            }
 
-        Event event = new Event(type);
-
-        switch (type) {
-            case Event.KEY_GAME_CREATE:
-                // N/A
-                break;
-            case Event.KEY_PLAYER_JOIN:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerJoinRequest.class)
-                );
-                break;
-            case Event.KEY_PLAYER_NEW_BID:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerNewBid.class)
-                );
-                break;
-            case Event.KEY_PLAYER_READY:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerNewBid.class)
-                );
-                break;
-            case Event.KEY_PLAYER_NOT_READY:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerNotReady.class)
-                );
-                break;
-            case Event.KEY_PLAY_AGAIN:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayAgainRequest.class)
-                );
-                break;
-            case Event.KEY_PLAYER_ALIVE_CHECK:
-                event.setValue(
-                        gson.fromJson(wholeJson.get(Event.KEY_EVENT_VALUE).getAsJsonObject().toString(), PlayerAliveCheck.class)
-                );
-                break;
-            case Event.KEY_GAME_START:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_GAME_RESTART:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_NEW_ROUND:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_GET_ALL_RESULTS:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_PICK_CARD:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_CAMEL_WON:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_SHOULD_SIDE_CARD_TURN:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_MOVE_CARDS_BY_LATEST:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            case Event.KEY_NEW_CAMEL_LIST:
-                event.setValue(
-                        wholeJson.get(Event.KEY_EVENT_VALUE).getAsString()
-                );
-                break;
-            default:
-                throw new Exception(String.format("No suitable event found for:\r\nType '%s'\r\nWhole json: '%s'", type, wholeJson.toString()));
+        } else {
+            System.out.println(String.format("%s\t||\tInfo\t||\t%s", generateTimeStamp(), message));
         }
-        return event;
+    }
+
+    public static void logError(Exception e) {
+        if (isProduction) {
+
+            String log = String.format("%s\t||\t - Production - \tError\t||\t%s", generateTimeStamp(), e.getMessage());
+            try (FileWriter fw = new FileWriter(generateFileName(), true)){
+                fw.write(log);
+            } catch (IOException ioe) {
+                System.err.println("IOException: " + ioe.getMessage());
+            }
+
+        } else {
+            e.printStackTrace();
+            System.out.println(String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage()));
+        }
+    }
+
+    private static String generateTimeStamp() {
+        return dateFormat.format(new Date());
+    }
+
+    private static String generateFileName() {
+        String date = fileDateFormat.format(new Date());
+        String filename = String.format("logs/%s.txt", date);
+        return filename;
+    }
+
+    private static boolean isProduction() throws Exception {
+        Properties props = configProps;
+        if (props == null) {
+            throw new Exception("No properties file found...");
+        }
+        return Boolean.parseBoolean(props.getProperty(Config.KEY_PROPERTIES_CONFIG_PRODUCTION));
+    }
+
+    private static Properties getConfigProperties() {
+        try (InputStream input = new FileInputStream(Config.NAME_PROPERTIES_CONFIG)) {
+
+            Properties prop = new Properties();
+            prop.load(input);
+
+            return prop;
+        } catch (IOException ex) {
+            logError(ex);
+            return null;
+        }
     }
 }

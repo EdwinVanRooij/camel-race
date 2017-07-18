@@ -1,0 +1,83 @@
+2017-07-18 20.56.23	||	 - Production - 	Info	||	Started server.
+2017-07-18 20.56.38	||	 - Production - 	Info	||	Host connection opened.
+2017-07-18 20.56.38	||	 - Production - 	Info	||	Received from Host: {'eventType': 'gameCreate'}
+2017-07-18 20.56.38	||	 - Production - 	Info	||	Sending: {"eventType":"gameCreated","value":{"id":"xida","bids":{},"players":[],"sideCardList":[{"position":1,"isVisible":false,"cardType":"DIAMONDS","cardValue":"NINE"},{"position":2,"isVisible":false,"cardType":"HEARTS","cardValue":"THREE"},{"position":3,"isVisible":false,"cardType":"DIAMONDS","cardValue":"KING"},{"position":4,"isVisible":false,"cardType":"DIAMONDS","cardValue":"JACK"}],"camelList":[{"row":0,"position":0,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":0,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":0,"cardType":"SPADES","cardValue":"ACE"}],"deck":[{"cardType":"CLUBS","cardValue":"TWO"},{"cardType":"CLUBS","cardValue":"THREE"},{"cardType":"CLUBS","cardValue":"FOUR"},{"cardType":"CLUBS","cardValue":"FIVE"},{"cardType":"CLUBS","cardValue":"SIX"},{"cardType":"CLUBS","cardValue":"SEVEN"},{"cardType":"CLUBS","cardValue":"EIGHT"},{"cardType":"CLUBS","cardValue":"NINE"},{"cardType":"CLUBS","cardValue":"TEN"},{"cardType":"CLUBS","cardValue":"JACK"},{"cardType":"CLUBS","cardValue":"QUEEN"},{"cardType":"CLUBS","cardValue":"KING"},{"cardType":"DIAMONDS","cardValue":"TWO"},{"cardType":"DIAMONDS","cardValue":"THREE"},{"cardType":"DIAMONDS","cardValue":"FOUR"},{"cardType":"DIAMONDS","cardValue":"FIVE"},{"cardType":"DIAMONDS","cardValue":"SIX"},{"cardType":"DIAMONDS","cardValue":"SEVEN"},{"cardType":"DIAMONDS","cardValue":"EIGHT"},{"cardType":"DIAMONDS","cardValue":"TEN"},{"cardType":"DIAMONDS","cardValue":"QUEEN"},{"cardType":"HEARTS","cardValue":"TWO"},{"cardType":"HEARTS","cardValue":"FOUR"},{"cardType":"HEARTS","cardValue":"FIVE"},{"cardType":"HEARTS","cardValue":"SIX"},{"cardType":"HEARTS","cardValue":"SEVEN"},{"cardType":"HEARTS","cardValue":"EIGHT"},{"cardType":"HEARTS","cardValue":"NINE"},{"cardType":"HEARTS","cardValue":"TEN"},{"cardType":"HEARTS","cardValue":"JACK"},{"cardType":"HEARTS","cardValue":"QUEEN"},{"cardType":"HEARTS","cardValue":"KING"},{"cardType":"SPADES","cardValue":"TWO"},{"cardType":"SPADES","cardValue":"THREE"},{"cardType":"SPADES","cardValue":"FOUR"},{"cardType":"SPADES","cardValue":"FIVE"},{"cardType":"SPADES","cardValue":"SIX"},{"cardType":"SPADES","cardValue":"SEVEN"},{"cardType":"SPADES","cardValue":"EIGHT"},{"cardType":"SPADES","cardValue":"NINE"},{"cardType":"SPADES","cardValue":"TEN"},{"cardType":"SPADES","cardValue":"JACK"},{"cardType":"SPADES","cardValue":"QUEEN"},{"cardType":"SPADES","cardValue":"KING"}],"gameEnded":false}}
+2017-07-18 20.56.46	||	 - Production - 	Info	||	Client connection opened.
+2017-07-18 20.56.48	||	 - Production - 	Info	||	Received from Client: {"eventType":"playerJoin","value":{"gameId":"xida","player":{"id":0,"name":"32"}}}
+2017-07-18 20.56.49	||	 - Production - 	Info	||	Sending: {"eventType":"playerJoined","value":{"id":1,"name":"32"}}
+2017-07-18 20.56.49	||	 - Production - 	Info	||	Sending: {"eventType":"playerJoined","value":{"id":1,"name":"32"}}
+2017-07-18 20.56.49	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.49	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.56.50	||	 - Production - 	Info	||	Received from Client: {"eventType":"playerReady","value":{"bid":{"type":"SPADES","value":2},"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.50	||	 - Production - 	Info	||	Sending: {"eventType":"playerReadySuccess","value":true}
+2017-07-18 20.56.50	||	 - Production - 	Info	||	Sending: {"eventType":"playerReady","value":{"gameId":"xida","player":{"id":1,"name":"32"},"bid":{"type":"SPADES","value":2}}}
+2017-07-18 20.56.50	||	 - Production - 	Info	||	Sending: {"eventType":"gameReady","value":""}
+2017-07-18 20.56.51	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.51	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.56.53	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.53	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.56.55	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.55	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.56.55	||	 - Production - 	Info	||	Received from Host: {'eventType': 'gameStart', 'value': 'xida'}
+2017-07-18 20.56.55	||	 - Production - 	Info	||	Sending: {"eventType":"gameStartedWithState","value":{"sideCardList":[{"position":1,"isVisible":false,"cardType":"DIAMONDS","cardValue":"NINE"},{"position":2,"isVisible":false,"cardType":"HEARTS","cardValue":"THREE"},{"position":3,"isVisible":false,"cardType":"DIAMONDS","cardValue":"KING"},{"position":4,"isVisible":false,"cardType":"DIAMONDS","cardValue":"JACK"}],"camelList":[{"row":0,"position":0,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":0,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":0,"cardType":"SPADES","cardValue":"ACE"}],"deck":[{"cardType":"CLUBS","cardValue":"TWO"},{"cardType":"CLUBS","cardValue":"THREE"},{"cardType":"CLUBS","cardValue":"FOUR"},{"cardType":"CLUBS","cardValue":"FIVE"},{"cardType":"CLUBS","cardValue":"SIX"},{"cardType":"CLUBS","cardValue":"SEVEN"},{"cardType":"CLUBS","cardValue":"EIGHT"},{"cardType":"CLUBS","cardValue":"NINE"},{"cardType":"CLUBS","cardValue":"TEN"},{"cardType":"CLUBS","cardValue":"JACK"},{"cardType":"CLUBS","cardValue":"QUEEN"},{"cardType":"CLUBS","cardValue":"KING"},{"cardType":"DIAMONDS","cardValue":"TWO"},{"cardType":"DIAMONDS","cardValue":"THREE"},{"cardType":"DIAMONDS","cardValue":"FOUR"},{"cardType":"DIAMONDS","cardValue":"FIVE"},{"cardType":"DIAMONDS","cardValue":"SIX"},{"cardType":"DIAMONDS","cardValue":"SEVEN"},{"cardType":"DIAMONDS","cardValue":"EIGHT"},{"cardType":"DIAMONDS","cardValue":"TEN"},{"cardType":"DIAMONDS","cardValue":"QUEEN"},{"cardType":"HEARTS","cardValue":"TWO"},{"cardType":"HEARTS","cardValue":"FOUR"},{"cardType":"HEARTS","cardValue":"FIVE"},{"cardType":"HEARTS","cardValue":"SIX"},{"cardType":"HEARTS","cardValue":"SEVEN"},{"cardType":"HEARTS","cardValue":"EIGHT"},{"cardType":"HEARTS","cardValue":"NINE"},{"cardType":"HEARTS","cardValue":"TEN"},{"cardType":"HEARTS","cardValue":"JACK"},{"cardType":"HEARTS","cardValue":"QUEEN"},{"cardType":"HEARTS","cardValue":"KING"},{"cardType":"SPADES","cardValue":"TWO"},{"cardType":"SPADES","cardValue":"THREE"},{"cardType":"SPADES","cardValue":"FOUR"},{"cardType":"SPADES","cardValue":"FIVE"},{"cardType":"SPADES","cardValue":"SIX"},{"cardType":"SPADES","cardValue":"SEVEN"},{"cardType":"SPADES","cardValue":"EIGHT"},{"cardType":"SPADES","cardValue":"NINE"},{"cardType":"SPADES","cardValue":"TEN"},{"cardType":"SPADES","cardValue":"JACK"},{"cardType":"SPADES","cardValue":"QUEEN"},{"cardType":"SPADES","cardValue":"KING"}],"gameEnded":false}}
+2017-07-18 20.56.55	||	 - Production - 	Info	||	Sending to multiple sessions: {"eventType":"gameStarted","value":""}
+2017-07-18 20.56.57	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.57	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.56.59	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.56.59	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.01	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.01	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.03	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.03	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.05	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.05	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.07	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.07	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.07	||	 - Production - 	Info	||	Received from Host: {'eventType': 'pickCard', 'value': 'xida'}
+2017-07-18 20.57.07	||	 - Production - 	Info	||	Sending: {"eventType":"pickedCard","value":{"cardType":"SPADES","cardValue":"FIVE"}}
+2017-07-18 20.57.08	||	 - Production - 	Info	||	Received from Host: {'eventType': 'camelWon', 'value': 'xida'}
+2017-07-18 20.57.08	||	 - Production - 	Info	||	Sending: {"eventType":"camelDidNotWin","value":""}
+2017-07-18 20.57.08	||	 - Production - 	Info	||	Received from Host: {'eventType': 'moveCardsByLatest', 'value': 'xida'}
+2017-07-18 20.57.09	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.08	||	 - Production - 	Info	||	Sending: {"eventType":"newCamelPositions","value":[{"row":0,"position":0,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":0,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":1,"cardType":"SPADES","cardValue":"ACE"}]}
+2017-07-18 20.57.09	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.10	||	 - Production - 	Info	||	Received from Host: {'eventType': 'shouldSideCardTurn', 'value': 'xida'}
+2017-07-18 20.57.10	||	 - Production - 	Info	||	Sending: {"eventType":"shouldSideCardTurnNo","value":""}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Received from Host: {'eventType': 'pickCard', 'value': 'xida'}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Sending: {"eventType":"pickedCard","value":{"cardType":"HEARTS","cardValue":"SIX"}}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Received from Host: {'eventType': 'camelWon', 'value': 'xida'}
+2017-07-18 20.57.11	||	 - Production - 	Info	||	Sending: {"eventType":"camelDidNotWin","value":""}
+2017-07-18 20.57.12	||	 - Production - 	Info	||	Received from Host: {'eventType': 'moveCardsByLatest', 'value': 'xida'}
+2017-07-18 20.57.12	||	 - Production - 	Info	||	Sending: {"eventType":"newCamelPositions","value":[{"row":0,"position":0,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":1,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":1,"cardType":"SPADES","cardValue":"ACE"}]}
+2017-07-18 20.57.13	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.13	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.13	||	 - Production - 	Info	||	Received from Host: {'eventType': 'shouldSideCardTurn', 'value': 'xida'}
+2017-07-18 20.57.13	||	 - Production - 	Info	||	Sending: {"eventType":"shouldSideCardTurnNo","value":""}
+2017-07-18 20.57.14	||	 - Production - 	Info	||	Received from Host: {'eventType': 'pickCard', 'value': 'xida'}
+2017-07-18 20.57.14	||	 - Production - 	Info	||	Sending: {"eventType":"pickedCard","value":{"cardType":"SPADES","cardValue":"KING"}}
+2017-07-18 20.57.15	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.15	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.15	||	 - Production - 	Info	||	Received from Host: {'eventType': 'camelWon', 'value': 'xida'}
+2017-07-18 20.57.15	||	 - Production - 	Info	||	Sending: {"eventType":"camelDidNotWin","value":""}
+2017-07-18 20.57.16	||	 - Production - 	Info	||	Received from Host: {'eventType': 'moveCardsByLatest', 'value': 'xida'}
+2017-07-18 20.57.16	||	 - Production - 	Info	||	Sending: {"eventType":"newCamelPositions","value":[{"row":0,"position":0,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":1,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":2,"cardType":"SPADES","cardValue":"ACE"}]}
+2017-07-18 20.57.17	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.17	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.17	||	 - Production - 	Info	||	Received from Host: {'eventType': 'shouldSideCardTurn', 'value': 'xida'}
+2017-07-18 20.57.17	||	 - Production - 	Info	||	Sending: {"eventType":"shouldSideCardTurnNo","value":""}
+2017-07-18 20.57.18	||	 - Production - 	Info	||	Received from Host: {'eventType': 'pickCard', 'value': 'xida'}
+2017-07-18 20.57.18	||	 - Production - 	Info	||	Sending: {"eventType":"pickedCard","value":{"cardType":"CLUBS","cardValue":"FIVE"}}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Received from Host: {'eventType': 'camelWon', 'value': 'xida'}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Sending: {"eventType":"camelDidNotWin","value":""}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Received from Host: {'eventType': 'moveCardsByLatest', 'value': 'xida'}
+2017-07-18 20.57.19	||	 - Production - 	Info	||	Sending: {"eventType":"newCamelPositions","value":[{"row":0,"position":1,"cardType":"CLUBS","cardValue":"ACE"},{"row":1,"position":0,"cardType":"DIAMONDS","cardValue":"ACE"},{"row":2,"position":1,"cardType":"HEARTS","cardValue":"ACE"},{"row":3,"position":2,"cardType":"SPADES","cardValue":"ACE"}]}
+2017-07-18 20.57.21	||	 - Production - 	Info	||	Received from Client: {"eventType":"aliveCheck","value":{"gameId":"xida","player":{"id":1,"name":"32"}}}
+2017-07-18 20.57.21	||	 - Production - 	Info	||	Sending: {"eventType":"aliveCheckConfirmed","value":true}
+2017-07-18 20.57.21	||	 - Production - 	Info	||	Received from Host: {'eventType': 'shouldSideCardTurn', 'value': 'xida'}
+2017-07-18 20.57.21	||	 - Production - 	Info	||	Sending: {"eventType":"shouldSideCardTurnNo","value":""}
+2017-07-18 20.57.22	||	 - Production - 	Info	||	Client connection closed.
+2017-07-18 20.57.22	||	 - Production - 	Info	||	Host connection closed.

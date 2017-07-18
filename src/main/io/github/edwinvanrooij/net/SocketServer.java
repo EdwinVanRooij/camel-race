@@ -1,9 +1,15 @@
 package io.github.edwinvanrooij.net;
 
-import io.github.edwinvanrooij.Util;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import io.github.edwinvanrooij.Config;
 import io.github.edwinvanrooij.camelraceshared.domain.*;
 import io.github.edwinvanrooij.camelraceshared.events.*;
 import io.github.edwinvanrooij.domain.GameManager;
+import io.github.edwinvanrooij.net.endpoints.ClientEndpoint;
+import io.github.edwinvanrooij.net.endpoints.DefaultEndpoint;
+import io.github.edwinvanrooij.net.endpoints.HostEndpoint;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -21,14 +27,14 @@ import javax.websocket.server.ServerContainer;
 import java.io.IOException;
 import java.util.*;
 
+import static io.github.edwinvanrooij.Util.log;
+import static io.github.edwinvanrooij.Util.logError;
+
 /**
  * Created by eddy
  * on 6/5/17.
  */
 public class SocketServer implements Runnable {
-
-    private static final int PORT = 8085;
-
     private static SocketServer ourInstance = new SocketServer();
 
     public static SocketServer getInstance() {
@@ -39,11 +45,13 @@ public class SocketServer implements Runnable {
     }
 
     private GameManager gameManager = new GameManager();
+    private static Gson gson = new Gson();
+    private static JsonParser parser = new JsonParser();
 
     @Override
     public void run() {
         try {
-            Server server = new Server(PORT);
+            Server server = new Server(Config.PORT);
 
             // Setup the context for servlets
             ServletContextHandler context = new ServletContextHandler();
@@ -85,204 +93,208 @@ public class SocketServer implements Runnable {
             server.join();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logError(e);
         }
     }
 
-    public void handleMessage(String message, Session session) {
-        try {
-            Event event = Util.jsonToEvent(message);
+    private void handleClientMessage(String type, JsonObject json, Session session) throws Exception {
+        switch (type) {
+            case Event.KEY_PLAYER_JOIN: {
+                PlayerJoinRequest playerJoinRequest = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerJoinRequest.class);
+                String gameId = playerJoinRequest.getGameId();
+                Player player = gameManager.playerJoin(gameId, playerJoinRequest.getPlayer(), session);
+                sendMessage(Event.KEY_PLAYER_JOINED, player, session);
 
-            switch (event.getEventType()) {
+                Game game = gameManager.getGameById(gameId);
+                sendMessage(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
+                break;
+            }
 
-                case Event.KEY_GAME_CREATE: {
-                    Game game = gameManager.createGame(session);
-                    sendMessage(Event.KEY_GAME_CREATED, game, session);
-                    break;
+            case Event.KEY_PLAYER_NEW_BID: {
+                PlayerNewBid playerNewBid = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerNewBid.class);
+                Boolean result = gameManager.playerNewBid(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
+                sendMessage(Event.KEY_PLAYER_BID_HANDED_IN, result, session);
+
+                Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
+                sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
+                break;
+            }
+
+            case Event.KEY_PLAYER_READY: {
+                PlayerNewBid playerNewBid = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerNewBid.class);
+                Boolean result = gameManager.playerNewBidAndReady(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
+                sendMessage(Event.KEY_PLAYER_READY_SUCCESS, result, session);
+
+                Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
+                sendMessage(Event.KEY_PLAYER_READY, playerNewBid, gameSession);
+
+                if (gameManager.isEveryoneReady(playerNewBid.getGameId())) {
+                    sendMessage(Event.KEY_GAME_READY, "", gameSession);
                 }
+                break;
+            }
 
-                case Event.KEY_PLAYER_JOIN: {
-                    PlayerJoinRequest playerJoinRequest = (PlayerJoinRequest) event.getValue();
-                    String gameId = playerJoinRequest.getGameId();
-                    Player player = gameManager.playerJoin(gameId, playerJoinRequest.getPlayer(), session);
-                    sendMessage(Event.KEY_PLAYER_JOINED, player, session);
+            case Event.KEY_PLAYER_NOT_READY: {
+                PlayerNotReady playerNotReady = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerNotReady.class);
+                Boolean result = gameManager.playerNotReady(playerNotReady.getGameId(), playerNotReady.getPlayer());
+                sendMessage(Event.KEY_PLAYER_NOT_READY_SUCCESS, result, session);
 
-                    Game game = gameManager.getGameById(gameId);
-                    sendMessage(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
-                    break;
-                }
+                Session gameSession = gameManager.getSessionByGameId(playerNotReady.getGameId());
+                sendMessage(Event.KEY_PLAYER_NOT_READY, playerNotReady, gameSession);
+                break;
+            }
 
-                case Event.KEY_PLAYER_NEW_BID: {
-                    PlayerNewBid playerNewBid = (PlayerNewBid) event.getValue();
-                    Boolean result = gameManager.playerNewBid(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
-                    sendMessage(Event.KEY_PLAYER_BID_HANDED_IN, result, session);
+            case Event.KEY_PLAYER_ALIVE_CHECK: {
+                PlayerAliveCheck playerAliveCheck = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerAliveCheck.class);
+                gameManager.playerAliveCheck(playerAliveCheck);
 
-                    Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
-                    sendMessage(Event.KEY_PLAYER_NEW_BID, playerNewBid, gameSession);
-                    break;
-                }
+                sendMessage(Event.KEY_PLAYER_ALIVE_CHECK_CONFIRMED, true, session);
+                break;
+            }
 
-                case Event.KEY_PLAYER_READY: {
-                    PlayerNewBid playerNewBid = (PlayerNewBid) event.getValue();
-                    Boolean result = gameManager.playerNewBidAndReady(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
-                    sendMessage(Event.KEY_PLAYER_READY_SUCCESS, result, session);
+            case Event.KEY_PLAY_AGAIN: {
+                PlayAgainRequest playAgainRequest = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayAgainRequest.class);
 
-                    Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
-                    sendMessage(Event.KEY_PLAYER_READY, playerNewBid, gameSession);
+                String gameId = playAgainRequest.getGameId();
+                Game game = gameManager.getGameById(gameId);
 
+                game.playAgain(playAgainRequest.getPlayer().getId(), true);
 
-                    if (gameManager.isEveryoneReady(playerNewBid.getGameId())) {
-                        System.out.println("Everyone is ready");
-                        sendMessage(Event.KEY_GAME_READY, "", gameSession);
-                    }
-                    break;
-                }
+                sendMessage(Event.KEY_PLAY_AGAIN_SUCCESSFUL, true, session);
 
-                case Event.KEY_PLAYER_NOT_READY: {
-                    PlayerNotReady playerNotReady = (PlayerNotReady) event.getValue();
-                    Boolean result = gameManager.playerNotReady(playerNotReady.getGameId(), playerNotReady.getPlayer());
-                    sendMessage(Event.KEY_PLAYER_NOT_READY_SUCCESS, result, session);
-
-                    Session gameSession = gameManager.getSessionByGameId(playerNotReady.getGameId());
-                    sendMessage(Event.KEY_PLAYER_NOT_READY, playerNotReady, gameSession);
-                    break;
-                }
-
-                case Event.KEY_PLAYER_ALIVE_CHECK: {
-                    PlayerAliveCheck playerAliveCheck = (PlayerAliveCheck) event.getValue();
-                    gameManager.playerAliveCheck(playerAliveCheck);
-
-                    sendMessage(Event.KEY_PLAYER_ALIVE_CHECK_CONFIRMED, true, session);
-                    break;
-                }
-
-                case Event.KEY_GAME_START: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-                    GameState currentGameState = game.generateGameState();
-                    sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
-
-                    List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
-                    sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
-
-//                    while (!currentGameState.isGameEnded()) {
-//                        Thread.sleep(INTERVAL);
-//                        game.nextRound();
-//                        currentGameState = game.generateGameState();
-//                        sendMessage(Event.KEY_NEW_ROUND, currentGameState, session);
-//                    }
-//
-//                    GameResults gameResults = game.generateGameResults();
-//                    System.out.println("Results before going in send message: " + gameResults.toString());
-//                    sendMessage(Event.KEY_GAME_OVER_ALL_RESULTS, gameResults, session);
-                    break;
-                }
-
-                case Event.KEY_PICK_CARD: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-                    Card card = game.pickCard();
-
-                    sendMessage(Event.KEY_PICKED_CARD, card, session);
-                    break;
-                }
-
-                case Event.KEY_CAMEL_WON: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-                    Camel camel = game.didCamelWinYet();
-
-                    if (camel != null) {
-                        sendMessage(Event.KEY_CAMEL_DID_WIN, camel, session);
-                    } else {
-                        sendMessage(Event.KEY_CAMEL_DID_NOT_WIN, "", session);
-                    }
-                    break;
-                }
-
-                case Event.KEY_MOVE_CARDS_BY_LATEST: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-                    game.moveCamelAccordingToLastCard();
-                    List<Camel> newCamelPositions = game.getCamelList();
-
-                    sendMessage(Event.KEY_NEW_CAMEL_POSITIONS, newCamelPositions, session);
-                    break;
-                }
-
-                case Event.KEY_SHOULD_SIDE_CARD_TURN: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-                    boolean shouldItTurn = game.shouldTurnSideCard();
-
-                    if (shouldItTurn) {
-                        sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_YES, game.getSideCardList(), session);
-                    } else {
-                        sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_NO, "", session);
-                    }
-                    break;
-                }
-
-                case Event.KEY_NEW_CAMEL_LIST: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-
-                    sendMessage(Event.KEY_NEW_CAMEL_LIST, game.newCamelList(), session);
-                    break;
-                }
-
-                case Event.KEY_GET_ALL_RESULTS: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
-
-                    GameResults gameResults = game.generateGameResults();
-                    sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);
-
-                    for (Player player : game.getPlayers()) {
-                        boolean won;
-                        Bid bid = game.getBid(player.getId());
-                        won = bid.getType() == game.getWinner().getCardType();
-                        PersonalResultItem item = new PersonalResultItem(bid, won);
-                        sendMessage(Event.KEY_GAME_OVER_PERSONAL_RESULTS, item, gameManager.getSessionByPlayerId(player.getId()));
-                    }
-                    break;
-                }
-
-                case Event.KEY_GAME_RESTART: {
-                    String gameId = (String) event.getValue();
-                    Game game = gameManager.getGameById(gameId);
+                if (game.allPlayAgain()) {
                     restartGame(game);
-                    break;
                 }
+                break;
+            }
+            default:
+                throw new Exception("Could not determine a correct event type for client message.");
+        }
+    }
 
-                case Event.KEY_PLAY_AGAIN: {
-                    PlayAgainRequest playAgainRequest = (PlayAgainRequest) event.getValue();
+    private void handleHostMessage(String type, JsonObject json, Session session) throws Exception {
 
-                    String gameId = playAgainRequest.getGameId();
-                    Game game = gameManager.getGameById(gameId);
+        switch (type) {
+            case Event.KEY_GAME_CREATE: {
+                Game game = gameManager.createGame(session);
+                sendMessage(Event.KEY_GAME_CREATED, game, session);
+                break;
+            }
 
-                    game.playAgain(playAgainRequest.getPlayer().getId(), true);
-                    System.out.println(String.format("Player %s wants to play again!", playAgainRequest.getPlayer().getName()));
+            case Event.KEY_GAME_START: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                GameState currentGameState = game.generateGameState();
+                sendMessage(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
 
-                    sendMessage(Event.KEY_PLAY_AGAIN_SUCCESSFUL, true, session);
+                List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
+                sendMessages(Event.KEY_GAME_STARTED, "", playerSessions);
 
-                    if (game.allPlayAgain()) {
-                        System.out.println("Everyone wants to play again!");
-                        restartGame(game);
-                    } else {
-                        System.out.println("Not everyone wants to play again");
-                    }
-                    break;
+                break;
+            }
+
+            case Event.KEY_PICK_CARD: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                Card card = game.pickCard();
+
+                sendMessage(Event.KEY_PICKED_CARD, card, session);
+                break;
+            }
+
+            case Event.KEY_CAMEL_WON: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                Camel camel = game.didCamelWinYet();
+
+                if (camel != null) {
+                    sendMessage(Event.KEY_CAMEL_DID_WIN, camel, session);
+                } else {
+                    sendMessage(Event.KEY_CAMEL_DID_NOT_WIN, "", session);
                 }
+                break;
+            }
+
+            case Event.KEY_MOVE_CARDS_BY_LATEST: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                game.moveCamelAccordingToLastCard();
+                List<Camel> newCamelPositions = game.getCamelList();
+
+                sendMessage(Event.KEY_NEW_CAMEL_POSITIONS, newCamelPositions, session);
+                break;
+            }
+
+            case Event.KEY_SHOULD_SIDE_CARD_TURN: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                boolean shouldItTurn = game.shouldTurnSideCard();
+
+                if (shouldItTurn) {
+                    sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_YES, game.getSideCardList(), session);
+                } else {
+                    sendMessage(Event.KEY_SHOULD_SIDE_CARD_TURN_NO, "", session);
+                }
+                break;
+            }
+
+            case Event.KEY_NEW_CAMEL_LIST: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+
+                sendMessage(Event.KEY_NEW_CAMEL_LIST, game.newCamelList(), session);
+                break;
+            }
+
+            case Event.KEY_GET_ALL_RESULTS: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+
+                GameResults gameResults = game.generateGameResults();
+                sendMessage(Event.KEY_ALL_RESULTS, gameResults, session);
+
+                for (Map.Entry<Player, Session> entry : gameManager.getPlayerSessionMapByGame(game).entrySet()) {
+                    Bid bid = game.getBid(entry.getKey().getId());
+                    boolean thisPlayerWon = bid.getType() == game.getWinner().getCardType();
+                    PersonalResultItem item = new PersonalResultItem(bid, thisPlayerWon);
+                    sendMessage(Event.KEY_GAME_OVER_PERSONAL_RESULTS, item, entry.getValue());
+                }
+                break;
+            }
+
+            case Event.KEY_GAME_RESTART: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                restartGame(game);
+                break;
+            }
+
+            default:
+                throw new Exception("Could not determine a correct event type for host message.");
+        }
+    }
+
+    public void handleMessage(MessageType messageType, String message, Session session) {
+        try {
+            JsonObject json = parser.parse(message).getAsJsonObject();
+            String type = json.get(Event.KEY_TYPE).getAsString();
+
+            switch (messageType) {
+                case CLIENT:
+                    handleClientMessage(type, json, session);
+                    break;
+                case HOST:
+                    handleHostMessage(type, json, session);
+                    break;
+                default:
+                    throw new RuntimeException("Could not determine whether a client or a host sent this message.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logError(e);
         }
     }
 
     private void restartGame(Game game) throws Exception {
-        System.out.println("Restarting game");
-
         Session gameSession = gameManager.getSessionByGameId(game.getId());
         sendMessage(Event.KEY_GAME_RESTART, "", gameSession);
 
@@ -306,27 +318,30 @@ public class SocketServer implements Runnable {
     private void sendMessage(String eventType, Object value, Session session) {
         try {
             Event event = new Event(eventType, value);
-            String message = Util.objectToJson(event);
-            System.out.println(String.format("Sending: %s", message));
+            String message = new Gson().toJson(event);
+            log(String.format("Sending: %s", message));
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
-            e.printStackTrace();
+            logError(e);
         }
     }
 
     private void sendMessages(String eventType, Object value, List<Session> sessionList) {
         Event event = new Event(eventType, value);
-        String message = Util.objectToJson(event);
-        System.out.println(String.format("Sending messages: %s", message));
+        String message = new Gson().toJson(event);
+        log(String.format("Sending to multiple sessions: %s", message));
 
         for (Session session : sessionList) {
             try {
                 session.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                System.out.println("Could not send message nullpointer on session");
+            } catch (IOException | NullPointerException e) {
+                logError(e);
             }
         }
+    }
+
+    public enum MessageType {
+        HOST,
+        CLIENT
     }
 }
