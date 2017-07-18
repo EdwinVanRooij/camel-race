@@ -81,3 +81,4 @@
 2017-07-18 20.57.21	||	 - Production - 	Info	||	Sending: {"eventType":"shouldSideCardTurnNo","value":""}
 2017-07-18 20.57.22	||	 - Production - 	Info	||	Client connection closed.
 2017-07-18 20.57.22	||	 - Production - 	Info	||	Host connection closed.
+2017-07-18 21.01.44	||	 - Production - 	Info	||	Started server.
