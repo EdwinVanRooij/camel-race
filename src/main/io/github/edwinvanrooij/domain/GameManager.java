@@ -4,7 +4,7 @@ package io.github.edwinvanrooij.domain;
 import io.github.edwinvanrooij.camelraceshared.domain.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.events.PlayerAliveCheck;
+import io.github.edwinvanrooij.camelraceshared.domain.PlayerAliveCheck;
 
 import javax.websocket.Session;
 import java.util.*;

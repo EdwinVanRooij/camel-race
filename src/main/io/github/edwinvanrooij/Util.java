@@ -31,33 +31,27 @@ public class Util {
 
     public static void log(String message) {
         if (isProduction) {
-
             String log = String.format("%s\t||\tInfo\t||\t%s\n", generateTimeStamp(), message);
-            try (FileWriter fw = new FileWriter(generateFileName(), true)){
+            try (FileWriter fw = new FileWriter(generateFileName(), true)) {
                 fw.write(log);
             } catch (IOException ioe) {
                 System.err.println("IOException: " + ioe.getMessage());
             }
-
-        } else {
-            System.out.println(String.format("%s\t||\tInfo\t||\t%s", generateTimeStamp(), message));
         }
+        System.out.println(String.format("%s\t||\tInfo\t||\t%s", generateTimeStamp(), message));
     }
 
     public static void logError(Exception e) {
         if (isProduction) {
-
             String log = String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage());
-            try (FileWriter fw = new FileWriter(generateFileName(), true)){
+            try (FileWriter fw = new FileWriter(generateFileName(), true)) {
                 fw.write(log);
             } catch (IOException ioe) {
                 System.err.println("IOException: " + ioe.getMessage());
             }
-
-        } else {
-            e.printStackTrace();
-            System.out.println(String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage()));
         }
+        e.printStackTrace();
+        System.out.println(String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage()));
     }
 
     private static String generateTimeStamp() {
@@ -66,8 +60,7 @@ public class Util {
 
     private static String generateFileName() {
         String date = fileDateFormat.format(new Date());
-        String filename = String.format("logs/%s.txt", date);
-        return filename;
+        return String.format("logs/%s.txt", date);
     }
 
     private static boolean isProduction() throws Exception {
