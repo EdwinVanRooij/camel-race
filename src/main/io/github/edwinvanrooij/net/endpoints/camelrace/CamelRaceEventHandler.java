@@ -2,6 +2,7 @@ package io.github.edwinvanrooij.net.endpoints.camelrace;
 
 import com.google.gson.JsonObject;
 import io.github.edwinvanrooij.camelraceshared.domain.*;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.*;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.net.BaseEventHandler;
 
@@ -98,14 +99,14 @@ public class CamelRaceEventHandler extends BaseEventHandler {
         try {
             switch (event) {
                 case Event.KEY_GAME_CREATE: {
-                    Game game = gameManager.createGame(session);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.createCamelRaceGame(session);
                     sendEvent(Event.KEY_GAME_CREATED, game, session);
                     break;
                 }
 
                 case Event.KEY_GAME_START: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
                     GameState currentGameState = game.generateGameState();
                     sendEvent(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
 
@@ -117,7 +118,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_PICK_CARD: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
                     Card card = game.pickCard();
 
                     sendEvent(Event.KEY_PICKED_CARD, card, session);
@@ -126,7 +127,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_CAMEL_WON: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
                     Camel camel = game.didCamelWinYet();
 
                     if (camel != null) {
@@ -139,7 +140,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_MOVE_CARDS_BY_LATEST: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
                     game.moveCamelAccordingToLastCard();
                     List<Camel> newCamelPositions = game.getCamelList();
 
@@ -149,7 +150,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_SHOULD_SIDE_CARD_TURN: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
                     boolean shouldItTurn = game.shouldTurnSideCard();
 
                     if (shouldItTurn) {
@@ -162,7 +163,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_NEW_CAMEL_LIST: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
 
                     sendEvent(Event.KEY_NEW_CAMEL_LIST, game.newCamelList(), session);
                     break;
@@ -170,7 +171,7 @@ public class CamelRaceEventHandler extends BaseEventHandler {
 
                 case Event.KEY_GET_ALL_RESULTS: {
                     String gameId = json.get(Event.KEY_VALUE).getAsString();
-                    Game game = gameManager.getGameById(gameId);
+                    CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
 
                     GameResults gameResults = game.generateGameResults();
                     sendEvent(Event.KEY_ALL_RESULTS, gameResults, session);

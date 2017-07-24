@@ -3,8 +3,10 @@ package io.github.edwinvanrooij.net;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.Const;
 import io.github.edwinvanrooij.camelraceshared.domain.*;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.PlayerNewBid;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.domain.GameManager;
 
@@ -40,7 +42,8 @@ public abstract class BaseEventHandler {
         for (Player player : game.getPlayers()) {
             sendEvent(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
 
-            Bid bid = game.getBid(player.getId());
+            CamelRaceGame game1 = (CamelRaceGame) game;
+            Bid bid = game1.getBid(player.getId());
             if (bid == null) {
                 throw new Exception("Bid is null! This is not allowed when restarting a game.");
             }

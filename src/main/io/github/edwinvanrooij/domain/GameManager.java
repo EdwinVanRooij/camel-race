@@ -1,10 +1,11 @@
 package io.github.edwinvanrooij.domain;
 
 
-import io.github.edwinvanrooij.camelraceshared.domain.Bid;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 import io.github.edwinvanrooij.camelraceshared.domain.PlayerAliveCheck;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
 
 import javax.websocket.Session;
 import java.util.*;
@@ -24,9 +25,16 @@ public class GameManager {
         playerSessionMap = new HashMap<>();
     }
 
-    public Game createGame(Session session) throws Exception {
+//    public Game createGame(Session session) throws Exception {
+//        String id = generateUniqueGameId();
+//        Game game = new Game(id);
+//        games.add(game);
+//        gameSessionMap.put(game.getId(), session);
+//        return game;
+//    }
+    public Game createCamelRaceGame(Session session) throws Exception {
         String id = generateUniqueGameId();
-        Game game = new Game(id);
+        Game game = new CamelRaceGame(id);
         games.add(game);
         gameSessionMap.put(game.getId(), session);
         return game;
@@ -110,14 +118,14 @@ public class GameManager {
     }
 
     public boolean playerNewBidAndReady(String gameId, Player player, Bid bid) throws Exception {
-        Game game = getGameById(gameId);
+        CamelRaceGame game = (CamelRaceGame) getGameById(gameId);
         game.newBid(player, bid);
         game.ready(player, true);
         return true;
     }
 
     public boolean playerNewBid(String gameId, Player player, Bid bid) throws Exception {
-        Game game = getGameById(gameId);
+        CamelRaceGame game = (CamelRaceGame) getGameById(gameId);
         game.newBid(player, bid);
         return true;
     }
