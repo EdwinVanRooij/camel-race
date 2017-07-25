@@ -3,9 +3,11 @@ package io.github.edwinvanrooij.net;
 import io.github.edwinvanrooij.Config;
 import io.github.edwinvanrooij.Const;
 import io.github.edwinvanrooij.net.endpoints.camelrace.CamelRaceEventHandler;
-import io.github.edwinvanrooij.net.endpoints.camelrace.ClientEndpoint;
-import io.github.edwinvanrooij.net.endpoints.DefaultEndpoint;
-import io.github.edwinvanrooij.net.endpoints.camelrace.HostEndpoint;
+
+import io.github.edwinvanrooij.net.endpoints.camelrace.*;
+
+import io.github.edwinvanrooij.net.endpoints.mexican.*;
+
 import io.github.edwinvanrooij.net.endpoints.mexican.MexicanEventHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -82,9 +84,15 @@ public class SocketServer implements Runnable {
             server.setHandler(handlers);
 
             ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(context);
-            wscontainer.addEndpoint(HostEndpoint.class);
-            wscontainer.addEndpoint(ClientEndpoint.class);
-            wscontainer.addEndpoint(DefaultEndpoint.class);
+
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.camelrace.HostEndpoint.class);
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.camelrace.ClientEndpoint.class);
+
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.mexican.HostEndpoint.class);
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.mexican.ClientEndpoint.class);
+
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.DefaultClientEndpoint.class);
+            wscontainer.addEndpoint(io.github.edwinvanrooij.net.endpoints.DefaultHostEndpoint.class);
 
             server.start();
             server.join();

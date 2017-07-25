@@ -78,7 +78,6 @@ public abstract class BaseEventHandler {
 
     public enum EventType {
         HOST,
-        CLIENT,
-        DEFAULT
+        CLIENT
     }
 }

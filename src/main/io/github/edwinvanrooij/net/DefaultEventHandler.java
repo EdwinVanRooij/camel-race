@@ -6,6 +6,8 @@ import io.github.edwinvanrooij.camelraceshared.events.Event;
 
 import javax.websocket.Session;
 
+import static io.github.edwinvanrooij.Util.log;
+
 /**
  * Created by eddy
  * on 7/25/17.
@@ -33,6 +35,6 @@ public class DefaultEventHandler extends BaseEventHandler {
 
     @Override
     protected void handleHostEvent(String event, JsonObject json, Session session) throws Exception {
-
+        log("Client events not implemented.");
     }
 }

@@ -17,6 +17,12 @@ public class Const {
     public static final String KEY_GAME_NAME_CAMELRACE = "CamelRace";
     public static final String KEY_GAME_NAME_MEXICAN = "Mexican";
 
+
+    // Endpoints
+    public static final String DEFAULT_ENDPOINT = "/";
+    public static final String DEFAULT_ENDPOINT_CLIENT = "/client";
+    public static final String DEFAULT_ENDPOINT_HOST = "/host";
+
     public static final String MEXICAN_ENDPOINT_CLIENT = "/mexican/client";
     public static final String MEXICAN_ENDPOINT_HOST = "/mexican/host";
 
