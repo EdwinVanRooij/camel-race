@@ -27,32 +27,8 @@ public abstract class BaseEventHandler {
     protected static JsonParser parser = new JsonParser();
     protected static Gson gson = new Gson();
 
-    protected GameManager gameManager = new GameManager();
-
     public BaseEventHandler() {
 
-    }
-
-    protected void restartGame(Game game) throws Exception {
-        Session gameSession = gameManager.getSessionByGameId(game.getId());
-        sendEvent(Event.KEY_GAME_RESTART, "", gameSession);
-
-        game.restart();
-
-        for (Player player : game.getPlayers()) {
-            sendEvent(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
-
-            CamelRaceGame game1 = (CamelRaceGame) game;
-            Bid bid = game1.getBid(player.getId());
-            if (bid == null) {
-                throw new Exception("Bid is null! This is not allowed when restarting a game.");
-            }
-            PlayerNewBid playerBid = new PlayerNewBid(game.getId(), player, bid);
-            sendEvent(Event.KEY_PLAYER_NEW_BID, playerBid, gameManager.getSessionByGameId(game.getId()));
-        }
-        for (Map.Entry<Player, Session> entry : gameManager.getPlayerSessionMapByGame(game).entrySet()) {
-            sendEvent(Event.KEY_PLAYER_JOINED, entry.getKey(), entry.getValue());
-        }
     }
 
     public void handleEvent(EventType eventType, String message, Session session) throws Exception {
@@ -102,6 +78,7 @@ public abstract class BaseEventHandler {
 
     public enum EventType {
         HOST,
-        CLIENT
+        CLIENT,
+        DEFAULT
     }
 }

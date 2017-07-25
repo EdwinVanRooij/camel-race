@@ -16,7 +16,7 @@ import static io.github.edwinvanrooij.Util.log;
  * on 6/5/17.
  */
 
-@ServerEndpoint("/mexican/host")
+@ServerEndpoint(Const.MEXICAN_ENDPOINT_HOST)
 public class HostEndpoint {
     private static String gameName = Const.KEY_GAME_NAME_MEXICAN;
 

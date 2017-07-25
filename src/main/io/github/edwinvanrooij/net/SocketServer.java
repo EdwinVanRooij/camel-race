@@ -37,10 +37,12 @@ public class SocketServer implements Runnable {
 
     private CamelRaceEventHandler camelRaceEventHandler;
     private MexicanEventHandler mexicanEventHandler;
+    private DefaultEventHandler defaultEventHandler;
 
     private SocketServer() {
         camelRaceEventHandler = new CamelRaceEventHandler();
         mexicanEventHandler = new MexicanEventHandler();
+        defaultEventHandler = new DefaultEventHandler();
     }
 
     @Override
@@ -100,6 +102,9 @@ public class SocketServer implements Runnable {
                     break;
                 case Const.KEY_GAME_NAME_MEXICAN:
                     mexicanEventHandler.handleEvent(eventType, message, session);
+                    break;
+                case Const.KEY_DEFAULT_ENDPOINT:
+                    defaultEventHandler.handleEvent(eventType, message, session);
                     break;
                 default:
                     throw new Exception("Could not determine which game this event came from.");

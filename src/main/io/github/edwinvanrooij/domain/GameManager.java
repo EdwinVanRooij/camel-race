@@ -1,6 +1,8 @@
 package io.github.edwinvanrooij.domain;
 
 
+import io.github.edwinvanrooij.Const;
+import io.github.edwinvanrooij.Util;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
@@ -32,39 +34,23 @@ public class GameManager {
 //        gameSessionMap.put(game.getId(), session);
 //        return game;
 //    }
+
     public Game createCamelRaceGame(Session session) throws Exception {
-        String id = generateUniqueGameId();
+        String id = generateUniqueGameId(Const.PREFIX_CAMEL_RACE);
         Game game = new CamelRaceGame(id);
         games.add(game);
         gameSessionMap.put(game.getId(), session);
         return game;
     }
 
-    private String generateUniqueGameId() {
+    private String generateUniqueGameId(String prefix) {
         String id;
         do {
-            id = generateGameId();
+            id = Util.generateGameId(prefix);
         } while (gameWithIdExists(id));
         return id;
     }
 
-    private String generateGameId() {
-        char[] vowels = "aeiouy".toCharArray(); // klinkers
-        char[] consonants = "bcdfghjklmnpqrstvwxz".toCharArray(); // medeklinkers
-
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 4; i++) {
-            char c;
-            if (i % 2 == 1) {
-                c = vowels[random.nextInt(vowels.length)];
-            } else {
-                c = consonants[random.nextInt(consonants.length)];
-            }
-            sb.append(c);
-        }
-        return sb.toString();
-    }
 
     public Session getSessionByGameId(String id) {
         return gameSessionMap.get(id.toLowerCase());

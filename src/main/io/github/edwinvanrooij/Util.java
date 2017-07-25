@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Random;
 
 /**
  * Created by eddy
@@ -41,7 +42,7 @@ public class Util {
         System.out.println(String.format("%s\t||\tInfo\t||\t%s", generateTimeStamp(), message));
     }
 
-    public static void logError(Exception e) {
+    public static void logError(Throwable e) {
         if (isProduction) {
             String log = String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage());
             try (FileWriter fw = new FileWriter(generateFileName(), true)) {
@@ -83,4 +84,37 @@ public class Util {
             return null;
         }
     }
+
+    public static String extractGameType(String gameId) throws Exception {
+        String firstChar = gameId.substring(0, 1);
+        switch (firstChar) {
+            case Const.PREFIX_CAMEL_RACE:
+                return Const.KEY_GAME_TYPE_CAMEL_RACE;
+            case Const.PREFIX_MEXICAN:
+                return Const.KEY_GAME_TYPE_CAMEL_RACE;
+            default:
+                throw new Exception(String.format("Could not determine which game type relates to game ID '%s'", gameId));
+        }
+    }
+
+    public static String generateGameId(String prefix) {
+        char[] vowels = "aeiouy".toCharArray(); // klinkers
+        char[] consonants = "bcdfghjklmnpqrstvwxz".toCharArray(); // medeklinkers
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        sb.append(prefix);
+        for (int i = 0; i < 4; i++) {
+            char c;
+            if (i % 2 == 0) {
+                c = vowels[random.nextInt(vowels.length)];
+            } else {
+                c = consonants[random.nextInt(consonants.length)];
+            }
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
 }

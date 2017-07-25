@@ -10,13 +10,14 @@ import javax.websocket.server.ServerEndpoint;
 
 import static io.github.edwinvanrooij.Config.MAX_IDLE_TIMEOUT_CLIENT;
 import static io.github.edwinvanrooij.Util.log;
+import static io.github.edwinvanrooij.Util.logError;
 
 /**
  * Created by eddy
  * on 6/5/17.
  */
 
-@ServerEndpoint("/camelrace/client")
+@ServerEndpoint(Const.CAMEL_RACE_ENDPOINT_CLIENT)
 public class ClientEndpoint {
     private static String gameName = Const.KEY_GAME_NAME_CAMELRACE;
 
@@ -34,6 +35,7 @@ public class ClientEndpoint {
     @OnError
     public void onError(Throwable error) {
         log(String.format("%s (client): %s", gameName, error.getMessage()));
+        logError(error);
     }
 
     @OnMessage

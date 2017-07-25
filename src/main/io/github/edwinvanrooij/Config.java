@@ -10,6 +10,7 @@ public class Config {
     public static final int PORT = 8085;
 
     // Max host timeout
+    public static final int MAX_IDLE_TIMEOUT_DEFAULT = 5; // in minutes
     public static final int MAX_IDLE_TIMEOUT_CLIENT = 10; // in minutes
     public static final int MAX_IDLE_TIMEOUT_HOST = 30; // in minutes
 

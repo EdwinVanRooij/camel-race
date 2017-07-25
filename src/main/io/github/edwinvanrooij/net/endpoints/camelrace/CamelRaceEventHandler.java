@@ -5,6 +5,7 @@ import io.github.edwinvanrooij.camelraceshared.domain.*;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.*;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.net.BaseEventHandler;
+import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;
 
@@ -17,7 +18,7 @@ import static io.github.edwinvanrooij.Util.logError;
  * Created by eddy
  * on 7/24/17.
  */
-public class CamelRaceEventHandler extends BaseEventHandler {
+public class CamelRaceEventHandler extends GameEventHandler {
     @Override
     protected void handleClientEvent(String event, JsonObject json, Session session) throws Exception {
         switch (event) {
