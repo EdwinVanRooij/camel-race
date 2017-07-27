@@ -19,14 +19,14 @@ public class DefaultEventHandler extends BaseEventHandler {
     }
 
     @Override
-    protected void handleClientEvent(String event, JsonObject json, Session session) throws Exception {
+    protected boolean handleClientEvent(String event, JsonObject json, Session session) throws Exception {
         switch (event) {
             case Event.KEY_WHICH_GAME_TYPE: {
                 String gameId = json.get(Event.KEY_VALUE).getAsString();
                 String gameType = Util.extractGameType(gameId);
 
                 sendEvent(Event.KEY_GAME_TYPE, gameType, session);
-                break;
+                return true;
             }
             default:
                 throw new Exception("Could not determine a correct event type for client message.");
@@ -34,7 +34,8 @@ public class DefaultEventHandler extends BaseEventHandler {
     }
 
     @Override
-    protected void handleHostEvent(String event, JsonObject json, Session session) throws Exception {
+    protected boolean handleHostEvent(String event, JsonObject json, Session session) throws Exception {
         log("Client events not implemented.");
+        return true;
     }
 }

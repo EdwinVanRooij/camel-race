@@ -3,8 +3,7 @@ package io.github.edwinvanrooij.net;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.camelraceshared.domain.Game;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
+import io.github.edwinvanrooij.camelraceshared.domain.*;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.PlayerNewBid;
@@ -32,6 +31,75 @@ public abstract class GameEventHandler extends BaseEventHandler {
 
     public GameEventHandler() {
 
+    }
+
+    @Override
+    protected boolean handleClientEvent(String event, JsonObject json, Session session) throws Exception {
+        switch (event) {
+            case Event.KEY_PLAYER_JOIN: {
+                PlayerJoinRequest playerJoinRequest = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerJoinRequest.class);
+                String gameId = playerJoinRequest.getGameId();
+                Player player = gameManager.playerJoin(gameId, playerJoinRequest.getPlayer(), session);
+                sendEvent(Event.KEY_PLAYER_JOINED, player, session);
+
+                Game game = gameManager.getGameById(gameId);
+                sendEvent(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
+                return true;
+            }
+
+            case Event.KEY_PLAYER_NOT_READY: {
+                PlayerNotReady playerNotReady = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerNotReady.class);
+                Boolean result = gameManager.playerNotReady(playerNotReady.getGameId(), playerNotReady.getPlayer());
+                sendEvent(Event.KEY_PLAYER_NOT_READY_SUCCESS, result, session);
+
+                Session gameSession = gameManager.getSessionByGameId(playerNotReady.getGameId());
+                sendEvent(Event.KEY_PLAYER_NOT_READY, playerNotReady, gameSession);
+                return true;
+            }
+
+            case Event.KEY_PLAYER_ALIVE_CHECK: {
+                PlayerAliveCheck playerAliveCheck = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerAliveCheck.class);
+                gameManager.playerAliveCheck(playerAliveCheck);
+
+                sendEvent(Event.KEY_PLAYER_ALIVE_CHECK_CONFIRMED, true, session);
+                return true;
+            }
+
+            case Event.KEY_PLAY_AGAIN: {
+                PlayAgainRequest playAgainRequest = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayAgainRequest.class);
+
+                String gameId = playAgainRequest.getGameId();
+                Game game = gameManager.getGameById(gameId);
+
+                game.playAgain(playAgainRequest.getPlayer().getId(), true);
+
+                sendEvent(Event.KEY_PLAY_AGAIN_SUCCESSFUL, true, session);
+
+                if (game.allPlayAgain()) {
+                    restartGame(game);
+                }
+                return true;
+            }
+
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    protected boolean handleHostEvent(String event, JsonObject json, Session session) throws Exception {
+        switch (event) {
+
+            case Event.KEY_GAME_RESTART: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                Game game = gameManager.getGameById(gameId);
+                restartGame(game);
+                return true;
+            }
+
+            default:
+                return false;
+        }
     }
 
     protected void restartGame(Game game) throws Exception {

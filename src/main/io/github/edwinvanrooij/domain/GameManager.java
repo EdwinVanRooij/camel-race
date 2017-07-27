@@ -8,6 +8,7 @@ import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 import io.github.edwinvanrooij.camelraceshared.domain.PlayerAliveCheck;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
+import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
 
 import javax.websocket.Session;
 import java.util.*;
@@ -38,6 +39,14 @@ public class GameManager {
     public Game createCamelRaceGame(Session session) throws Exception {
         String id = generateUniqueGameId(Const.PREFIX_CAMEL_RACE);
         Game game = new CamelRaceGame(id);
+        games.add(game);
+        gameSessionMap.put(game.getId(), session);
+        return game;
+    }
+
+    public Game createMexicanGame(Session session) throws Exception {
+        String id = generateUniqueGameId(Const.PREFIX_MEXICAN);
+        Game game = new MexicanGame(id);
         games.add(game);
         gameSessionMap.put(game.getId(), session);
         return game;

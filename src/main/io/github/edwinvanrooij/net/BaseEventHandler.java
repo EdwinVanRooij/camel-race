@@ -47,9 +47,25 @@ public abstract class BaseEventHandler {
         }
     }
 
-    protected abstract void handleClientEvent(String event, JsonObject json, Session session) throws Exception;
+    /**
+     * Handles an event sent from a client.
+     * @param event event key, as defined in the Event class
+     * @param json json representation of the event data
+     * @param session session from which this event was sent
+     * @return a value indicating whether or not this event was dealt with yet
+     * @throws Exception
+     */
+    protected abstract boolean handleClientEvent(String event, JsonObject json, Session session) throws Exception;
 
-    protected abstract void handleHostEvent(String event, JsonObject json, Session session) throws Exception;
+    /**
+     * Handles an event sent from a host.
+     * @param event event key, as defined in the Event class
+     * @param json json representation of the event data
+     * @param session session from which this event was sent
+     * @return a value indicating whether or not this event was dealt with yet
+     * @throws Exception
+     */
+    protected abstract boolean handleHostEvent(String event, JsonObject json, Session session) throws Exception;
 
     protected void sendEvent(String eventType, Object value, Session session) {
         try {
