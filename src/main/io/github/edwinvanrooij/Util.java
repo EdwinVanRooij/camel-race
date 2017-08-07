@@ -44,7 +44,7 @@ public class Util {
 
     public static void logError(Throwable e) {
         if (isProduction) {
-            String log = String.format("%s\t||\tError\t||\t%s", generateTimeStamp(), e.getMessage());
+            String log = String.format("%s\t||\tError\t||\t%s\n", generateTimeStamp(), e.getMessage());
             try (FileWriter fw = new FileWriter(generateFileName(), true)) {
                 fw.write(log);
             } catch (IOException ioe) {
