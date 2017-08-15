@@ -39,17 +39,14 @@ public class CamelRaceEventHandler extends GameEventHandler {
             }
 
             case Event.KEY_PLAYER_READY: {
-                // todo; refactor this functionality to make it available in the game event handler
-                // basically, send two requests when someone's ready in camel race
-                // send a new bid, and a ready. then, handle both requests here seperately
-                PlayerNewBid playerNewBid = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerNewBid.class);
-                Boolean result = gameManager.playerNewBidAndReady(playerNewBid.getGameId(), playerNewBid.getPlayer(), playerNewBid.getBid());
+                PlayerReady playerReady = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerReady.class);
+                Boolean result = gameManager.playerReady(playerReady.getGameId(), playerReady.getPlayer());
                 sendEvent(Event.KEY_PLAYER_READY_SUCCESS, result, session);
 
-                Session gameSession = gameManager.getSessionByGameId(playerNewBid.getGameId());
-                sendEvent(Event.KEY_PLAYER_READY, playerNewBid, gameSession);
+                Session gameSession = gameManager.getSessionByGameId(playerReady.getGameId());
+                sendEvent(Event.KEY_PLAYER_READY, playerReady, gameSession);
 
-                if (gameManager.isEveryoneReady(playerNewBid.getGameId())) {
+                if (gameManager.isEveryoneReady(playerReady.getGameId())) {
                     sendEvent(Event.KEY_GAME_READY, "", gameSession);
                 }
                 return true;

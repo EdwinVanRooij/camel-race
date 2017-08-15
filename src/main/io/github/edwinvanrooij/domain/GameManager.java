@@ -112,9 +112,8 @@ public class GameManager {
         return true;
     }
 
-    public boolean playerNewBidAndReady(String gameId, Player player, Bid bid) throws Exception {
+    public boolean playerReady(String gameId, Player player) throws Exception {
         CamelRaceGame game = (CamelRaceGame) getGameById(gameId);
-        game.newBid(player, bid);
         game.ready(player, true);
         return true;
     }
