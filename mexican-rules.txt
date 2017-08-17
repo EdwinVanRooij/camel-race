@@ -1,0 +1,37 @@
+Voor spel:
+
+2-..* players
+2 dices
+2 opties: easy/hardcore, decided by players
+
+
+Worpen:
+
+Random speler begint met gooien
+Aantal keer gooien hangt af van mode, normaal - 3x max, hardcore - 1x max
+De 'pot' staat op het scherm, begint op basis van mode - normaal - 2x, hardcore - 4x
+
+Normale worpen:
+enkele, 45 wordt 54
+dubbele, 33 wordt 300
+
+Speciale worpen: 
+- 21 - hoogste, pot verdubbelt, klaar met beurt
+- 31 - je bent nu drieman, je gooi telt NIET als beurt, en je mag verder gaan
+- 11 - je bent nu honderdman, je gooi telt WEL als beurt, je mag verder proberen als je nog beurten over hebt
+
+
+Spelverloop:
+
+- Eerste speler mag x aantal keren gooien, mag eerder stoppen dan max aantal beurten die over zijn. Wanneer deze eerder stopt, mag de rest na hem/haar een gelijk aantal beurten gooien.
+- Wanneer er een drieman aanwezig is en er wordt een getal gegooid waar een 3 in zit, bijvoorbeeld 43, drinkt de drieman een slok.
+- Wanneer er een honderdman aanwezig is en er wordt een honderdtal gegooid, bijvoorbeeld 300, drinkt de honderdman een slok.
+
+Speciale gevallen hierop:
+- Wanneer er een nieuwe honderdman of drieman komt, vervalt de oude -man
+  METEEN, de nieuwe -man drinkt de slokken.
+
+Iedereen heeft gegooid? Degene die het laagste getal gegooid heeft, drinkt de huidige 'pot' in slokken op.
+
+Opmerkingen:
+- Je gooit alle dobbelstenen opnieuw, of geen. Niet eentje.
