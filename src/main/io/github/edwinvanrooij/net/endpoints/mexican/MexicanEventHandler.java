@@ -3,7 +3,6 @@ package io.github.edwinvanrooij.net.endpoints.mexican;
 import com.google.gson.JsonObject;
 import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
-import io.github.edwinvanrooij.net.BaseEventHandler;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;

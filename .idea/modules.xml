@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$USER_HOME$/Projects/camel-race-shared/camel-race-shared.iml" filepath="$USER_HOME$/Projects/camel-race-shared/camel-race-shared.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../camelco-shared/.idea/camelco-shared.iml" filepath="$PROJECT_DIR$/../camelco-shared/.idea/camelco-shared.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../camelco-shared/camelco-shared.iml" filepath="$PROJECT_DIR$/../camelco-shared/camelco-shared.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/camelrace.iml" filepath="$PROJECT_DIR$/.idea/modules/camelrace.iml" />
     </modules>
   </component>
