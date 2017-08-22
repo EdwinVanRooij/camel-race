@@ -57,6 +57,21 @@ public abstract class GameEventHandler extends BaseEventHandler {
                 return true;
             }
 
+            case Event.KEY_PLAYER_READY: {
+                PlayerReady playerReady = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerReady.class);
+                Boolean result = gameManager.playerReady(playerReady.getGameId(), playerReady.getPlayer());
+                sendEvent(Event.KEY_PLAYER_READY_SUCCESS, result, session);
+
+                Session gameSession = gameManager.getSessionByGameId(playerReady.getGameId());
+                sendEvent(Event.KEY_PLAYER_READY, playerReady, gameSession);
+
+                if (gameManager.isEveryoneReady(playerReady.getGameId())) {
+                    sendEvent(Event.KEY_GAME_READY, "", gameSession);
+                }
+                return true;
+            }
+
+
             case Event.KEY_PLAYER_ALIVE_CHECK: {
                 PlayerAliveCheck playerAliveCheck = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerAliveCheck.class);
                 gameManager.playerAliveCheck(playerAliveCheck);

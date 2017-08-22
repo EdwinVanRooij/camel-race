@@ -38,20 +38,6 @@ public class CamelRaceEventHandler extends GameEventHandler {
                 return true;
             }
 
-            case Event.KEY_PLAYER_READY: {
-                PlayerReady playerReady = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), PlayerReady.class);
-                Boolean result = gameManager.playerReady(playerReady.getGameId(), playerReady.getPlayer());
-                sendEvent(Event.KEY_PLAYER_READY_SUCCESS, result, session);
-
-                Session gameSession = gameManager.getSessionByGameId(playerReady.getGameId());
-                sendEvent(Event.KEY_PLAYER_READY, playerReady, gameSession);
-
-                if (gameManager.isEveryoneReady(playerReady.getGameId())) {
-                    sendEvent(Event.KEY_GAME_READY, "", gameSession);
-                }
-                return true;
-            }
-
             default:
                 throw new Exception("Could not determine a correct event type for client message.");
         }
@@ -74,12 +60,11 @@ public class CamelRaceEventHandler extends GameEventHandler {
             case Event.KEY_GAME_START: {
                 String gameId = json.get(Event.KEY_VALUE).getAsString();
                 CamelRaceGame game = (CamelRaceGame) gameManager.getGameById(gameId);
-                GameState currentGameState = game.generateGameState();
+                CamelRaceGameState currentGameState = game.generateGameState();
                 sendEvent(Event.KEY_GAME_STARTED_WITH_STATE, currentGameState, session);
 
                 List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
                 sendEvents(Event.KEY_GAME_STARTED, "", playerSessions);
-
                 return true;
             }
 

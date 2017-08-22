@@ -113,7 +113,7 @@ public class GameManager {
     }
 
     public boolean playerReady(String gameId, Player player) throws Exception {
-        CamelRaceGame game = (CamelRaceGame) getGameById(gameId);
+        Game game = getGameById(gameId);
         game.ready(player, true);
         return true;
     }
