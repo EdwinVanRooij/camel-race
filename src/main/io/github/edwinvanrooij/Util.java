@@ -86,7 +86,7 @@ public class Util {
     }
 
     public static String extractGameType(String gameId) throws Exception {
-        String firstChar = gameId.substring(0, 1);
+        String firstChar = gameId.substring(0, 1).toLowerCase();
         switch (firstChar) {
             case Const.PREFIX_CAMEL_RACE:
                 return Const.KEY_GAME_TYPE_CAMEL_RACE;

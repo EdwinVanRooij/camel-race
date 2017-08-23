@@ -1,14 +1,19 @@
 package io.github.edwinvanrooij.net.endpoints.mexican;
 
 import com.google.gson.JsonObject;
+import io.github.edwinvanrooij.camelraceshared.domain.Player;
 import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
+import io.github.edwinvanrooij.camelraceshared.domain.mexican.NewPlayerThrow;
 import io.github.edwinvanrooij.camelraceshared.domain.mexican.PlayerGameModeVote;
+import io.github.edwinvanrooij.camelraceshared.domain.mexican.Throw;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static io.github.edwinvanrooij.Util.log;
 
@@ -36,10 +41,36 @@ public class MexicanEventHandler extends GameEventHandler {
 
                 if (game.everyoneVoted()) {
                     List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
-                    sendEvents(Event.KEY_GAME_STARTED, "", playerSessions);
+                    sendEvents(Event.KEY_EVERYONE_VOTED, "", playerSessions);
 
-                    sendEvent(Event.KEY_GAME_STARTED_WITH_STATE, game.generateGameState(), gameSession);
+                    sendEvent(Event.KEY_EVERYONE_VOTED, game.generateGameState(), gameSession);
+
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                Player playerOnTurn = game.getNextPlayer();
+                                Session playerTurnSession = gameManager.getSessionByPlayerId(playerOnTurn.getId());
+                                sendEvent(Event.KEY_YOUR_TURN, "", playerTurnSession);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 3000);
                 }
+                return true;
+            }
+
+            case Event.KEY_NEW_THROW: {
+                NewPlayerThrow newPlayerThrow = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), NewPlayerThrow.class);
+                MexicanGame game = (MexicanGame) gameManager.getGameById(newPlayerThrow.getGameId());
+                Player p = game.getPlayer(newPlayerThrow.getPlayer().getId());
+                Throw newThrow = game.newPlayerThrow(p);
+
+                sendEvent(Event.KEY_NEW_THROW_SUCCESS, true, session);
+
+                Session gameSession = gameManager.getSessionByGameId(game.getId());
+                sendEvent(Event.KEY_NEW_THROW, newThrow, gameSession);
                 return true;
             }
 
