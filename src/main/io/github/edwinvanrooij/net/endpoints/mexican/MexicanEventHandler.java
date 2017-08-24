@@ -1,11 +1,9 @@
 package io.github.edwinvanrooij.net.endpoints.mexican;
 
 import com.google.gson.JsonObject;
+import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.NewPlayerThrow;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.PlayerGameModeVote;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.Throw;
+import io.github.edwinvanrooij.camelraceshared.domain.mexican.*;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
@@ -65,17 +63,50 @@ public class MexicanEventHandler extends GameEventHandler {
                 NewPlayerThrow newPlayerThrow = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), NewPlayerThrow.class);
                 MexicanGame game = (MexicanGame) gameManager.getGameById(newPlayerThrow.getGameId());
                 Player p = game.getPlayer(newPlayerThrow.getPlayer().getId());
-                Throw newThrow = game.newPlayerThrow(p);
 
-                sendEvent(Event.KEY_NEW_THROW_SUCCESS, true, session);
+                if (game.getCurrentPlayerInTurn() == p) {
+                    Throw newThrow = game.newPlayerThrow(p);
 
-                Session gameSession = gameManager.getSessionByGameId(game.getId());
-                sendEvent(Event.KEY_NEW_THROW, newThrow, gameSession);
+                    sendEvent(Event.KEY_NEW_THROW_SUCCESS, true, session);
+
+                    Session gameSession = gameManager.getSessionByGameId(game.getId());
+                    NewGameThrow newGameThrow = new NewGameThrow(newThrow, game.generateGameState());
+                    sendEvent(Event.KEY_NEW_GAME_THROW, newGameThrow, gameSession);
+                } else {
+                    sendEvent(Event.KEY_NEW_THROW_SUCCESS, false, session);
+                }
+                return true;
+            }
+
+            case Event.KEY_END_TURN: {
+                EndTurn endTurn = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), EndTurn.class);
+                MexicanGame game = (MexicanGame) gameManager.getGameById(endTurn.getGameId());
+                Player p = game.getPlayer(endTurn.getPlayerId());
+
+                playerEndsTurn(game, p);
                 return true;
             }
 
             default:
                 throw new Exception("Could not determine a correct event type for host message.");
+        }
+    }
+
+    private void playerEndsTurn(MexicanGame game, Player p) throws Exception {
+        game.playerStops(p);
+
+        if (game.everyoneIsDone()) {
+            MexicanGameResults gameResults = game.generateGameResults();
+            Session gameSession = gameManager.getSessionByGameId(game.getId());
+            sendEvent(Event.KEY_ALL_RESULTS, gameResults, gameSession);
+
+            // todo; send personalized results
+//                        List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
+//                        sendEvents(Event.KEY_GAME_OVER_PERSONAL_RESULTS, "", playerSessions);
+        } else {
+            Player nextPlayer = game.getNextPlayer();
+            Session playerTurnSession = gameManager.getSessionByPlayerId(nextPlayer.getId());
+            sendEvent(Event.KEY_YOUR_TURN, "", playerTurnSession);
         }
     }
 
@@ -100,6 +131,20 @@ public class MexicanEventHandler extends GameEventHandler {
 
                 List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
                 sendEvents(Event.KEY_GAME_STARTED, "", playerSessions);
+                return true;
+            }
+
+            case Event.KEY_THROW_ENDED: {
+                String gameId = json.get(Event.KEY_VALUE).getAsString();
+                MexicanGame game = (MexicanGame) gameManager.getGameById(gameId);
+
+                Player p = game.getCurrentPlayerInTurn();
+                if (game.playerHasThrowsLeft(p)) {
+                    Session pSession = gameManager.getSessionByPlayerId(p.getId());
+                    sendEvent(Event.KEY_PROMPT_THROW_OPTION, "", pSession);
+                } else {
+                    playerEndsTurn(game, p);
+                }
                 return true;
             }
 
