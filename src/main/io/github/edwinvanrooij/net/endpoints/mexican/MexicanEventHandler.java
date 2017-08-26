@@ -1,19 +1,16 @@
 package io.github.edwinvanrooij.net.endpoints.mexican;
 
 import com.google.gson.JsonObject;
-import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 import io.github.edwinvanrooij.camelraceshared.domain.mexican.*;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;
-
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static io.github.edwinvanrooij.Util.log;
 
 /**
  * Created by eddy
@@ -100,9 +97,12 @@ public class MexicanEventHandler extends GameEventHandler {
             Session gameSession = gameManager.getSessionByGameId(game.getId());
             sendEvent(Event.KEY_ALL_RESULTS, gameResults, gameSession);
 
-            // todo; send personalized results
-//                        List<Session> playerSessions = gameManager.getPlayerSessionsByGame(game);
-//                        sendEvents(Event.KEY_GAME_OVER_PERSONAL_RESULTS, "", playerSessions);
+            Player loser = gameResults.getLoser();
+            for (Map.Entry<Player, Session> entry : gameManager.getPlayerSessionMapByGame(game).entrySet()) {
+                boolean isLoser = entry.getKey().getId() == loser.getId();
+                PersonalResultItemMexican item = new PersonalResultItemMexican(isLoser, gameResults.getStake());
+                sendEvent(Event.KEY_GAME_OVER_PERSONAL_RESULTS, item, entry.getValue());
+            }
         } else {
             Player nextPlayer = game.getNextPlayer();
             Session playerTurnSession = gameManager.getSessionByPlayerId(nextPlayer.getId());

@@ -1,8 +1,8 @@
 package io.github.edwinvanrooij.net.endpoints.camelrace;
 
 import io.github.edwinvanrooij.Const;
-import io.github.edwinvanrooij.net.*;
 import io.github.edwinvanrooij.net.BaseEventHandler;
+import io.github.edwinvanrooij.net.SocketServer;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;

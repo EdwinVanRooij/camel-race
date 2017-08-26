@@ -7,8 +7,6 @@ import io.github.edwinvanrooij.net.SocketServer;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-import java.io.IOException;
-
 import static io.github.edwinvanrooij.Config.MAX_IDLE_TIMEOUT_DEFAULT;
 import static io.github.edwinvanrooij.Util.log;
 import static io.github.edwinvanrooij.Util.logError;

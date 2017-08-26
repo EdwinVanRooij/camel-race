@@ -3,11 +3,6 @@ package io.github.edwinvanrooij.net;
 import io.github.edwinvanrooij.Config;
 import io.github.edwinvanrooij.Const;
 import io.github.edwinvanrooij.net.endpoints.camelrace.CamelRaceEventHandler;
-
-import io.github.edwinvanrooij.net.endpoints.camelrace.*;
-
-import io.github.edwinvanrooij.net.endpoints.mexican.*;
-
 import io.github.edwinvanrooij.net.endpoints.mexican.MexicanEventHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -23,7 +18,7 @@ import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainer
 import javax.servlet.DispatcherType;
 import javax.websocket.Session;
 import javax.websocket.server.ServerContainer;
-import java.util.*;
+import java.util.EnumSet;
 
 import static io.github.edwinvanrooij.Util.logError;
 

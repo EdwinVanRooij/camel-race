@@ -3,17 +3,11 @@ package io.github.edwinvanrooij.net;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.camelraceshared.domain.*;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.PlayerNewBid;
 import io.github.edwinvanrooij.camelraceshared.events.Event;
-import io.github.edwinvanrooij.domain.GameManager;
 
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import static io.github.edwinvanrooij.Util.log;
 import static io.github.edwinvanrooij.Util.logError;

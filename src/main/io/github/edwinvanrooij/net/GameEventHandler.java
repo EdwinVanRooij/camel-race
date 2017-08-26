@@ -11,12 +11,7 @@ import io.github.edwinvanrooij.camelraceshared.events.Event;
 import io.github.edwinvanrooij.domain.GameManager;
 
 import javax.websocket.Session;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-
-import static io.github.edwinvanrooij.Util.log;
-import static io.github.edwinvanrooij.Util.logError;
 
 /**
  * Created by eddy
@@ -126,13 +121,15 @@ public abstract class GameEventHandler extends BaseEventHandler {
         for (Player player : game.getPlayers()) {
             sendEvent(Event.KEY_PLAYER_JOINED, player, gameManager.getSessionByGameId(game.getId()));
 
-            CamelRaceGame game1 = (CamelRaceGame) game;
-            Bid bid = game1.getBid(player.getId());
-            if (bid == null) {
-                throw new Exception("Bid is null! This is not allowed when restarting a game.");
+            if (game instanceof CamelRaceGame) {
+                CamelRaceGame game1 = (CamelRaceGame) game;
+                Bid bid = game1.getBid(player.getId());
+                if (bid == null) {
+                    throw new Exception("Bid is null! This is not allowed when restarting a game.");
+                }
+                PlayerNewBid playerBid = new PlayerNewBid(game.getId(), player, bid);
+                sendEvent(Event.KEY_PLAYER_NEW_BID, playerBid, gameManager.getSessionByGameId(game.getId()));
             }
-            PlayerNewBid playerBid = new PlayerNewBid(game.getId(), player, bid);
-            sendEvent(Event.KEY_PLAYER_NEW_BID, playerBid, gameManager.getSessionByGameId(game.getId()));
         }
         for (Map.Entry<Player, Session> entry : gameManager.getPlayerSessionMapByGame(game).entrySet()) {
             sendEvent(Event.KEY_PLAYER_JOINED, entry.getKey(), entry.getValue());
