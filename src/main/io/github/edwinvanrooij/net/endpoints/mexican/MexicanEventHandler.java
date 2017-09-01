@@ -59,6 +59,7 @@ public class MexicanEventHandler extends GameEventHandler {
             case Event.KEY_NEW_THROW: {
                 NewPlayerThrow newPlayerThrow = gson.fromJson(json.get(Event.KEY_VALUE).getAsJsonObject().toString(), NewPlayerThrow.class);
                 MexicanGame game = (MexicanGame) gameManager.getGameById(newPlayerThrow.getGameId());
+
                 Player p = game.getPlayer(newPlayerThrow.getPlayer().getId());
 
                 if (game.getCurrentPlayerInTurn() == p) {
