@@ -54,3 +54,8 @@ jar {
         attributes 'Main-Class': mainClassName
     }
 }
+
+
+stage {
+  dependsOn installDist
+}
