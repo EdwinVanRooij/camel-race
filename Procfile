@@ -1,1 +1,1 @@
-web: ./build/install/camelrace/lib/CamelRace.jar
+web: java -jar build/install/camelrace/lib/CamelRace.jar
