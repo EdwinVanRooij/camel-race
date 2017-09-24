@@ -8,7 +8,7 @@ public class Config {
 
     // Port of the SocketServer
     //public static final int PORT = 8085;
-    public static final int PORT = 40258;
+    public static final int PORT = System.getenv("PORT");
 // 40258
 
     // Max host timeout
