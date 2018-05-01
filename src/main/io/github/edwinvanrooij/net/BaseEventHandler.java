@@ -3,7 +3,8 @@ package io.github.edwinvanrooij.net;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.edwinvanrooij.camelraceshared.events.Event;
+import io.github.edwinvanrooij.events.Event;
+//import io.github.edwinvanrooij.camelraceshared.events.Event;
 
 import javax.websocket.Session;
 import java.io.IOException;

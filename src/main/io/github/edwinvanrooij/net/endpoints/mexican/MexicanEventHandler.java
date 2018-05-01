@@ -1,9 +1,12 @@
 package io.github.edwinvanrooij.net.endpoints.mexican;
 
 import com.google.gson.JsonObject;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.*;
-import io.github.edwinvanrooij.camelraceshared.events.Event;
+//import io.github.edwinvanrooij.camelraceshared.domain.Player;
+//import io.github.edwinvanrooij.camelraceshared.domain.mexican.*;
+//import io.github.edwinvanrooij.camelraceshared.events.Event;
+import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.mexican.*;
+import io.github.edwinvanrooij.events.Event;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;

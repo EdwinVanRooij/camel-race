@@ -1,10 +1,10 @@
 package io.github.edwinvanrooij.net.endpoints.camelrace;
 
 import com.google.gson.JsonObject;
-import io.github.edwinvanrooij.camelraceshared.domain.PersonalResultItem;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.*;
-import io.github.edwinvanrooij.camelraceshared.events.Event;
+import io.github.edwinvanrooij.domain.PersonalResultItem;
+import io.github.edwinvanrooij.domain.Player;
+import io.github.edwinvanrooij.domain.camelrace.*;
+import io.github.edwinvanrooij.events.Event;
 import io.github.edwinvanrooij.net.GameEventHandler;
 
 import javax.websocket.Session;

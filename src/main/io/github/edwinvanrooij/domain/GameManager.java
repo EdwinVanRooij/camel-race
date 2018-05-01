@@ -3,12 +3,15 @@ package io.github.edwinvanrooij.domain;
 
 import io.github.edwinvanrooij.Const;
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.camelraceshared.domain.Game;
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
-import io.github.edwinvanrooij.camelraceshared.domain.PlayerAliveCheck;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
-import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
+import io.github.edwinvanrooij.domain.camelrace.Bid;
+import io.github.edwinvanrooij.domain.camelrace.CamelRaceGame;
+import io.github.edwinvanrooij.domain.mexican.MexicanGame;
+//import io.github.edwinvanrooij.camelraceshared.domain.Game;
+//import io.github.edwinvanrooij.camelraceshared.domain.Player;
+//import io.github.edwinvanrooij.camelraceshared.domain.PlayerAliveCheck;
+//import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
+//import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGame;
+//import io.github.edwinvanrooij.camelraceshared.domain.mexican.MexicanGame;
 
 import javax.websocket.Session;
 import java.util.*;

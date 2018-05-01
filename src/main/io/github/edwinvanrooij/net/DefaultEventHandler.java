@@ -2,7 +2,8 @@ package io.github.edwinvanrooij.net;
 
 import com.google.gson.JsonObject;
 import io.github.edwinvanrooij.Util;
-import io.github.edwinvanrooij.camelraceshared.events.Event;
+import io.github.edwinvanrooij.events.Event;
+//import io.github.edwinvanrooij.camelraceshared.events.Event;
 
 import javax.websocket.Session;
 
